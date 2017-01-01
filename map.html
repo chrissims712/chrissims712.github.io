@@ -11,17 +11,30 @@
         margin: 0;
         padding: 0;
       }
+	  #search {
+		display: block;
+		position: absolute;
+		z-index: 2;
+		top: 20px;
+		left: 20px;
+	}
     </style>
     <script type="text/javascript" src="https://gc.kis.scr.kaspersky-labs.com/1B74BD89-2A22-4B93-B451-1C9E1052A0EC/main.js" charset="UTF-8"></script><script src="https://js.arcgis.com/3.19/"></script>
     <script>
       var map;
 
-      require(["esri/map", "dojo/domReady!"], function(Map) {
-        map = new Map("map", {
-          basemap: "topo",  //For full list of pre-defined basemaps, navigate to http://arcg.is/1JVo6Wd
-          center: [-122.45, 37.75], // longitude, latitude
-          zoom: 13
+      require(["esri/map", "esri/dijit/Search", "dojo/domReady!"], function(Map, Search) {
+        var map = new Map("map", {
+			basemap: "gray",
+			center: [-95.249, 38.954],
+			zoom: 7,
+			slider: false
         });
+		var search = new Search({
+			map: map
+			}, "search");
+			search.startup();
+			
       });
     </script>
   </head>
