@@ -28,7 +28,7 @@
 	  "esri/dijit/Search", 
 	  "dojo/domReady!"
 	  ], 
-	  function(Map, FeatureLayer, FeatureLayer2 Search) {
+	  function(Map, FeatureLayer, Search) {
         var map = new Map("map", {
 			basemap: "topo",
 			center: [-95.249, 38.954],
@@ -39,7 +39,7 @@
 		
 		map.addLayer(featureLayer);
 		
-		var featureLayer2 = new FeatureLayer2("https://services.arcgis.com/QWISJZQTqrWSOOHJ/arcgis/rest/services/NationalForestTrailsHikeBikeHorse/FeatureServer/0");
+		var featureLayer2 = new FeatureLayer("https://services.arcgis.com/QWISJZQTqrWSOOHJ/arcgis/rest/services/NationalForestTrailsHikeBikeHorse/FeatureServer/0");
 		
 		map.addLayer(featureLayer2);
 	
@@ -53,7 +53,7 @@
   </head>
   
   <body>
-	<div id="search"></div>
+	
 	<div id="map"></div>
   </body>
 </html>
