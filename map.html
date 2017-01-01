@@ -23,13 +23,21 @@
     <script>
       var map;
 
-      require(["esri/map", "esri/dijit/Search", "dojo/domReady!"], function(Map, Search) {
+      require(["esri/map", 
+	  "esri/layers/FeatureLayer", 
+	  "esri/dijit/Search", 
+	  "dojo/domReady!"
+	  ], 
+	  function(Map, FeatureLayer, Search) {
         var map = new Map("map", {
-			basemap: "gray",
+			basemap: "topo",
 			center: [-95.249, 38.954],
 			zoom: 7,
 			slider: false
         });
+		var featureLayer = new FeatureLayer("https://services.arcgis.com/QWISJZQTqrWSOOHJ/arcgis/rest/services/Hiking_Biking_and_Horseback_Trails/FeatureServer");
+		map.addLayer(featureLayer);
+		});
 		var search = new Search({
 			map: map
 			}, "search");
