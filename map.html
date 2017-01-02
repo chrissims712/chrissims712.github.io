@@ -24,22 +24,24 @@
       var map;
 
       require(["esri/map", 
-	  "esri/layers/ArcGISDynamicMapServiceLayer", 
+	  "esri/layers/FeatureLayer", 
 	  "esri/dijit/Search", 
 	  "dojo/domReady!"
 	  ], 
-	  function(Map, ArcGISDynamicMapServiceLayer, Search) {
+	  function(Map, FeatureLayer, Search) {
         map = new Map("map", {
 			basemap: "topo",
 			center: [-95.249, 38.954],
 			zoom: 7,
 			slider: false
         });
-		var hikeBikeTrails = new ArcGISDynamicMapServiceLayer("https://services.arcgis.com/QWISJZQTqrWSOOHJ/arcgis/rest/services/Hiking_Biking_and_Horseback_Trails/FeatureServer/0", {
-		"opacity" : 0.5,
-		});
+		var hikeBikeTrails = new FeatureLayer("https://services.arcgis.com/QWISJZQTqrWSOOHJ/arcgis/rest/services/Hiking_Biking_and_Horseback_Trails/FeatureServer/0");
+		
+		var motorizedTrails = new FeatureLayer("https://services.arcgis.com/QWISJZQTqrWSOOHJ/arcgis/rest/services/Motorized_National_Forest_Trails/FeatureServer/0");
 		
 		map.addLayer(hikeBikeTrails);
+		
+		map.addLayer(motorizedTrails);
 		
 	
 		var search = new Search({
