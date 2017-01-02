@@ -41,12 +41,13 @@
 		
 		var nationalForest = new FeatureLayer("https://services.arcgis.com/QWISJZQTqrWSOOHJ/arcgis/rest/services/National_Forests/FeatureServer/0");
 		
+		map.addLayer(nationalForest);
 		
 		map.addLayer(hikeBikeTrails);
 		
 		map.addLayer(motorizedTrails);
 		
-		map.addLayer(nationalForest);
+
 	
 		var search = new Search({
 			map: map
