@@ -29,13 +29,15 @@
 	  "dojo/domReady!"
 	  ], 
 	  function(Map, ArcGISDynamicMapServiceLayer, Search) {
-        var map = new Map("map", {
+        map = new Map("map", {
 			basemap: "topo",
 			center: [-95.249, 38.954],
 			zoom: 7,
 			slider: false
         });
-		var hikeBikeTrails = new ArcGISDynamicMapServiceLayer("https://services.arcgis.com/QWISJZQTqrWSOOHJ/arcgis/rest/services/Hiking_Biking_and_Horseback_Trails/FeatureServer/0");
+		var hikeBikeTrails = new ArcGISDynamicMapServiceLayer("https://services.arcgis.com/QWISJZQTqrWSOOHJ/arcgis/rest/services/Hiking_Biking_and_Horseback_Trails/FeatureServer/0", {
+		"opacity" : 0.5,
+		});
 		
 		map.addLayer(hikeBikeTrails);
 		
