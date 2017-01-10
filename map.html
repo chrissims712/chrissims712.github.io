@@ -4,6 +4,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
     <title>Simple Map</title>
+	<link rel="stylesheet" href="https://js.arcgis.com/3.19/dijit/themes/claro/claro.css">
     <link rel="stylesheet" href="https://js.arcgis.com/3.19/esri/css/esri.css">
     <style>
       html, body, #map {
@@ -18,37 +19,18 @@
 		top: 20px;
 		left: 20px;
 	}
-	.esriPopup.dark div.titleButton,
-	.esriPopup.dark div.titlePane .title,
-	.esriPopup.dark div.actionsPane .action{
-		color: #A4CE67;
-	}
-	.esriPopup.dark .esriPopupWrapper {
-		border: none;
-	}
-	.esriPopup .contentPane{
-		text-align: center;
-	}
-	.esriViewPopup .gallery{
-		margin: 0 auto;
-	}
+	
     </style>
     <script type="text/javascript" src="https://gc.kis.scr.kaspersky-labs.com/1B74BD89-2A22-4B93-B451-1C9E1052A0EC/main.js" charset="UTF-8"></script><script src="https://js.arcgis.com/3.19/"></script>
     <script>
       var map;
 
       require(["esri/map", 
-	  "esri/dijit/Popup",
-	  "esri/dijit/PopupTemplate",
 	  "esri/layers/FeatureLayer", 
-	  "dojo/dom-construct",
-	  "dojo/on",
 	  "esri/dijit/Search", 
 	  "dojo/domReady!"
 	  ], 
-	  function(Map, Popup, PopupTemplate, FeatureLayer, domConstruct, on, Search) {
-        var popup = new Popup({
-		}, domConstruct.create("div"));
+	  function(Map, FeatureLayer, Search) {
 		
 		map = new Map("map", {
 			basemap: "topo",
@@ -68,11 +50,7 @@
 		
 		var motorizedTrails = new FeatureLayer("https://services.arcgis.com/QWISJZQTqrWSOOHJ/arcgis/rest/services/Motorized_National_Forest_Trails/FeatureServer/0");
 		
-		var nationalForest = new FeatureLayer("https://services.arcgis.com/QWISJZQTqrWSOOHJ/arcgis/rest/services/National_Forests/FeatureServer/0",{
-		mode FeatureLayer.MODE_ONDEMAND,
-		outFields: ["*"],
-		infoTemplate: template
-		});
+		var nationalForest = new FeatureLayer("https://services.arcgis.com/QWISJZQTqrWSOOHJ/arcgis/rest/services/National_Forests/FeatureServer/0");
 		
 		map.addLayer(nationalForest);
 		
