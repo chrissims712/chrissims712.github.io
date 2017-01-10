@@ -47,7 +47,10 @@
 	  "dojo/domReady!"
 	  ], 
 	  function(Map, Popup, PopupTemplate, FeatureLayer, domConstruct, on, Search) {
-        map = new Map("map", {
+        var popup = new Popup({
+		}, domConstruct.create("div"));
+		
+		map = new Map("map", {
 			basemap: "topo",
 			center: [-95.249, 38.954],
 			zoom: 7,
