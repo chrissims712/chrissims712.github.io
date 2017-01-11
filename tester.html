@@ -11,13 +11,7 @@
         height: 100%;
         margin: 0;
         padding: 0;
-      }
-	  #search {
-		display: block;
-		position: absolute;
-		z-index: 2;
-		top: 20px;
-		left: 20px;
+      
 	}
 	
     </style>
@@ -26,21 +20,10 @@
       var map;
 
       require(["esri/map", 
-	  "esri/dijit/Popup",
-	  "esri/dijit/PopupTemplate",
 	  "esri/layers/FeatureLayer",
-	  "esri/symbols/SimpleFillSymbol",
-	  "dojo/dom-class", "dojo/dom-construct", "dojo/on",
 	  "dojo/domReady!"
 	  ], 
-	  function(Map, Popup, PopupTemplate, FeatureLayer, SimpleFillSymbol, Color, domConstruct, on) {
-		
-		var fill = new SimpleFillSymbol("solid", null, new Color("#A4CE67"));
-		var popup = new Popup({
-			fillSymbol: fill,
-			titleInBody: false
-		}, domConstruct.create("div"));
-		
+	  function(Map, FeatureLayer) {
 		map = new Map("map", {
 			basemap: "topo",
 			center: [-95.249, 38.954],
@@ -49,16 +32,10 @@
 			infoWindow: popup
         });
 		
-		var template = new PopupTemplate({
-		title: "National Forests",
-		description: "{FORESTNAME}"});
 		
 
 		
-		var nationalForest = new FeatureLayer("https://services.arcgis.com/QWISJZQTqrWSOOHJ/arcgis/rest/services/National_Forests/FeatureServer/0",{
-		mode: FeatureLayer.MODE_ONDEMAND,
-		infoTemplate: template
-		});
+		var nationalForest = new FeatureLayer("https://services.arcgis.com/QWISJZQTqrWSOOHJ/arcgis/rest/services/National_Forests/FeatureServer/0");
 		
 		map.addLayer(nationalForest);
 		
