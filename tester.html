@@ -20,10 +20,24 @@
       var map;
 
       require(["esri/map", 
+	  "esri/dijit/Popup",
+	  "esri/dijit/PopupTemplate",
+	  "esri/symbols/SimpleFillSymbol",
+	  "dojo/dom-construct",
+	  "dojo/on",
+	  "esri/Color",
 	  "esri/layers/FeatureLayer",
 	  "dojo/domReady!"
 	  ], 
-	  function(Map, FeatureLayer) {
+	  function(Map, Popup, PopupTemplate, SimpleFillSymbol, FeatureLayer, Color, domConstruct, on) {
+	  
+	  var fill = new SimpleFillSymbol("solid", null, new Color("#A4CE67"));
+		var popup = new Popup ({
+			fillSymbol: fill,
+			titleInBody: false
+			}, domConstruct.create("div"));
+		
+		
 		map = new Map("map", {
 			basemap: "topo",
 			center: [-95.249, 38.954],
@@ -31,10 +45,21 @@
 			slider: false
         });
 		
+		var template = new PopupTemplate({
+			title: "National Forest",
+			description: "{FORESTNAME}",
+			fieldInfos: [{
+				fieldName: "FORESTNAME",
+				label: "Forest"}]
+		});
+		
 		
 
 		
-		var nationalForest = new FeatureLayer("https://services.arcgis.com/QWISJZQTqrWSOOHJ/arcgis/rest/services/National_Forests/FeatureServer/0");
+		var nationalForest = new FeatureLayer("https://services.arcgis.com/QWISJZQTqrWSOOHJ/arcgis/rest/services/National_Forests/FeatureServer/0",{
+		mode: FeatureLayer.MODE_ONDEMAND,
+		outFields: ["*"],
+		infoTemplate: template});
 		
 		map.addLayer(nationalForest);
 		
