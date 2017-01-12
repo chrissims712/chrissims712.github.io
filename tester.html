@@ -54,10 +54,20 @@
 	  
 	  var motorizedTrails = new FeatureLayer({
         url: "https://services.arcgis.com/QWISJZQTqrWSOOHJ/arcgis/rest/services/Motorized_National_Forest_Trails/FeatureServer/0",
+		outFields: ["*"],
+		popupTemplate: {
+        title: "National Forest Trails for motorized vehicle use.",
+        content: "<p>{TRAIL_NAME}</p>"+
+		"<ul><li>This trail is called {TRAIL_NAME}.</li></ul>"}
       });
 	  
 	  var hikeBikeTrails = new FeatureLayer({
         url: "https://services.arcgis.com/QWISJZQTqrWSOOHJ/arcgis/rest/services/Hiking_Biking_and_Horseback_Trails/FeatureServer/0",
+		outField: ["*"],
+		popupTemplate: {
+        title: "National Forest Trails for hiking and biking.",
+        content: "<p>{TRAIL_NAME}</p>"+
+		"<ul><li>This trail is called {TRAIL_NAME}.</li></ul>"}
       });
 	  
       map.add(nationalForest);
