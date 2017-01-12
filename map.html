@@ -1,69 +1,66 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
-    <title>Simple Map</title>
-	<link rel="stylesheet" href="https://js.arcgis.com/3.19/dijit/themes/claro/claro.css">
-    <link rel="stylesheet" href="https://js.arcgis.com/3.19/esri/css/esri.css">
-    <style>
-      html, body, #map {
-        height: 100%;
-        margin: 0;
-        padding: 0;
-      }
-	  #search {
-		display: block;
-		position: absolute;
-		z-index: 2;
-		top: 20px;
-		left: 20px;
-	}
-	
-    </style>
-    <script type="text/javascript" src="https://gc.kis.scr.kaspersky-labs.com/1B74BD89-2A22-4B93-B451-1C9E1052A0EC/main.js" charset="UTF-8"></script><script src="https://js.arcgis.com/3.19/"></script>
-    <script>
-      var map;
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+  <title>National Forest Service Trails</title>
 
-      require(["esri/map", 
-	  "esri/layers/FeatureLayer", 
-	  "esri/dijit/Search", 
-	  "dojo/domReady!"
-	  ], 
-	  function(Map, FeatureLayer, Search) {
-		
-		map = new Map("map", {
-			basemap: "topo",
-			center: [-95.249, 38.954],
-			zoom: 7
+  <link rel="stylesheet" href="https://js.arcgis.com/4.2/esri/css/main.css">
+  <script type="text/javascript" src="https://gc.kis.scr.kaspersky-labs.com/1B74BD89-2A22-4B93-B451-1C9E1052A0EC/main.js" charset="UTF-8"></script><script src="https://js.arcgis.com/4.2/"></script>
+
+  <style>
+    html,
+    body,
+    #viewDiv {
+      padding: 0;
+      margin: 0;
+      height: 100%;
+      width: 100%;
+    }
+  </style>
+
+  <script>
+  require([
+        "esri/Map",
+        "esri/views/MapView",
+        "esri/layers/FeatureLayer",
+        "dojo/domReady!"
+      ],
+      function(
+        Map, MapView,
+        FeatureLayer
+      ) {
+
+        var map = new Map({
+          basemap: "hybrid"
+        });
+
+        var view = new MapView({
+          container: "viewDiv",
+          map: map,
+		  center: [-101.94981250000075, 41.20977753557709],
+		  zoom: 5
         });
 		
-		
-		var hikeBikeTrails = new FeatureLayer("https://services.arcgis.com/QWISJZQTqrWSOOHJ/arcgis/rest/services/Hiking_Biking_and_Horseback_Trails/FeatureServer/0");
-		
-		var motorizedTrails = new FeatureLayer("https://services.arcgis.com/QWISJZQTqrWSOOHJ/arcgis/rest/services/Motorized_National_Forest_Trails/FeatureServer/0");
-		
-		var nationalForest = new FeatureLayer("https://services.arcgis.com/QWISJZQTqrWSOOHJ/arcgis/rest/services/National_Forests/FeatureServer/0");
-		
-		map.addLayer(nationalForest);
-		
-		map.addLayer(hikeBikeTrails);
-		
-		map.addLayer(motorizedTrails);
-		
+      var template = {
+        title: "National Forest",
+        content: "<p>{FORESTNAME}</p>"+
+		"<ul><li>The size of this forest is {GIS_ACRES} acres.</li></ul>"
+      };
 
-	
-		var search = new Search({
-			map: map
-			}, "search");
-			search.startup();
-			
+
+      var nationalForest = new FeatureLayer({
+        url: "https://services.arcgis.com/QWISJZQTqrWSOOHJ/arcgis/rest/services/National_Forests/FeatureServer/0",
+        outFields: ["*"],
+        popupTemplate: template
       });
-    </script>
-  </head>
-  
-  <body>
-	<div id="search"></div>
-	<div id="map"></div>
-  </body>
+      map.add(nationalForest);
+    });
+  </script>
+</head>
+
+<body>
+  <div id="viewDiv"></div>
+</body>
+
 </html>
