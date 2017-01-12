@@ -44,16 +44,17 @@
 		
       var template = {
         title: "National Forest",
-        content: "<p>{FORESTNAME}</p>"
+        content: "<p>{FORESTNAME}</p>"+
+		"<ul><li>The size of this forest is {GIS_ACRES} acres.</li></ul>"
       };
 
 
-      var featureLayer = new FeatureLayer({
+      var nationalForest = new FeatureLayer({
         url: "https://services.arcgis.com/QWISJZQTqrWSOOHJ/arcgis/rest/services/National_Forests/FeatureServer/0",
         outFields: ["*"],
         popupTemplate: template
       });
-      map.add(featureLayer);
+      map.add(nationalForest);
     });
   </script>
 </head>
