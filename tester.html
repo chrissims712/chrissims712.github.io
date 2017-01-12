@@ -5,7 +5,10 @@
   <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
   <meta name="description" content="[Get started with PopupTemplate - 4.2]">
   <title>Get started with PopupTemplate - 4.2</title>
-
+<link rel="stylesheet" href="https://js.arcgis.com/4.2/esri/css/main.css">
+  <script type="text/javascript" src="https://gc.kis.scr.kaspersky-labs.com/1B74BD89-2A22-4B93-B451-1C9E1052A0EC/main.js" charset="UTF-8"></script>
+  <script src="https://js.arcgis.com/4.2/"></script>
+  
   <style>
     html,
     body,
@@ -17,9 +20,6 @@
     }
   </style>
 
-  <link rel="stylesheet" href="https://js.arcgis.com/4.2/esri/css/main.css">
-  <script type="text/javascript" src="https://gc.kis.scr.kaspersky-labs.com/1B74BD89-2A22-4B93-B451-1C9E1052A0EC/main.js" charset="UTF-8"></script><script src="https://js.arcgis.com/4.2/"></script>
-
   <script>
     require([
       "esri/Map",
@@ -28,28 +28,32 @@
       "dojo/domReady!"
     ], function(
       Map,
-      FeatureLayer,
-      MapView
+      MapView,
+	  FeatureLayer
     ) {
 
       // Create the map
       var map = new Map({
-        basemap: "gray"
+        basemap: "topo"
       });
 
       // Create the MapView
       var view = new MapView({
         container: "viewDiv",
         map: map,
-        center: [-73.950, 40.702],
-        zoom: 11
+        extent: {
+            xmin: -9177811,
+            ymin: 4247000,
+            xmax: -9176791,
+            ymax: 4247784
+          }
       });
 
 		
 
 		
 		var nationalForest = new FeatureLayer({
-			url:  "https://services.arcgis.com/QWISJZQTqrWSOOHJ/arcgis/rest/services/National_Forests/FeatureServer/0"
+			url: "https://services.arcgis.com/QWISJZQTqrWSOOHJ/arcgis/rest/services/National_Forests/FeatureServer/0"
 		});
         map.add(nationalForest);
       });
