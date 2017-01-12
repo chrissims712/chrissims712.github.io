@@ -38,18 +38,23 @@
         var view = new MapView({
           container: "viewDiv",
           map: map,
-		  center:  [-73.950, 40.702],
-		  zoom: 4
+		  center: [-101.94981250000075, 41.20977753557709],
+		  zoom: 5
         });
 		
-		
-        var nationalForest = new FeatureLayer({
-          url: "https://services.arcgis.com/QWISJZQTqrWSOOHJ/arcgis/rest/services/National_Forests/FeatureServer/0",
-        });
+      var template = {
+        title: "National Forest",
+        content: "<p>{FORESTNAME}</p>"
+      };
 
-        map.add(nationalForest);
 
+      var featureLayer = new FeatureLayer({
+        url: "https://services.arcgis.com/QWISJZQTqrWSOOHJ/arcgis/rest/services/National_Forests/FeatureServer/0",
+        outFields: ["*"],
+        popupTemplate: template
       });
+      map.add(featureLayer);
+    });
   </script>
 </head>
 
