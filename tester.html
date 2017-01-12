@@ -42,19 +42,47 @@
 		  zoom: 5
         });
 		
-      var template = {
+      var templateForest = {
         title: "National Forest",
         content: "<p>{FORESTNAME}</p>"+
 		"<ul><li>The size of this forest is {GIS_ACRES} acres.</li></ul>"
       };
-
+	  
+	  var templateMotorized = {
+		title: "National Forest Trails for motorized vehicles."
+		content: "<p>{TRAIL_NAME}</p>"
+		};
+		
+		var templateHikeBike = {
+		title: "National Forest Trails for hiking, biking and horseback use."
+		content: "<p>{TRAIL_NAME}</p>"+
+		"<ul><li>Elevation: {Elevation_feet}</li>"+
+		"<li>Slope: {Slope}</li>"+
+		"<li>{Slope_Difficulty}: Difficulty Rating due to slope.</li>"+
+		"<li>{Segment_Difficulty}: Dificulty Rating of the segment.</li><ul>"
+		};
 
       var nationalForest = new FeatureLayer({
         url: "https://services.arcgis.com/QWISJZQTqrWSOOHJ/arcgis/rest/services/National_Forests/FeatureServer/0",
         outFields: ["*"],
-        popupTemplate: template
+        popupTemplate: templateForest
       });
+	  
+	  var motorizedTrails = new FeatureLayer({
+        url: "https://services.arcgis.com/QWISJZQTqrWSOOHJ/arcgis/rest/services/Motorized_National_Forest_Trails/FeatureServer/0",
+        outFields: ["*"],
+        popupTemplate: templateMotorized
+      });
+	  
+	  var hikeBikeTrails = new FeatureLayer({
+        url: "https://services.arcgis.com/QWISJZQTqrWSOOHJ/arcgis/rest/services/Hiking_Biking_and_Horseback_Trails/FeatureServer/0",
+        outFields: ["*"],
+        popupTemplate: templateHikeBike
+      });
+	  
       map.add(nationalForest);
+	  map.add(motorizedTrails);
+	  map.add(hikeBikeTrails);
     });
   </script>
 </head>
