@@ -46,16 +46,14 @@
       });
 
 		
-		var template = {
-			title: "{FORESTNAME}",
-			content: "{FORESTNAME}",
-			fieldInfo: [{
-			fieldName: "FORESTNAME"
-			}]
-		};
+      var template = {
+        title: "Marriage in NY, Zip Code: {FORESTNAME}"
+
+      };
+
 		
 		var nationalForest = new FeatureLayer({url: "https://services.arcgis.com/QWISJZQTqrWSOOHJ/arcgis/rest/services/National_Forests/FeatureServer/0",
-		outFields: ["FORESTNAME",
+		outFields: ["FORESTNAME"],
 		popupTemplate: template
 		});
 		
