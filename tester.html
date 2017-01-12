@@ -42,14 +42,9 @@
 		  zoom: 4
         });
 		
-		var template = PopupTemplate{
-			title: "{FORESTNAME}"
-			};
 		
         var nationalForest = new FeatureLayer({
           url: "https://services.arcgis.com/QWISJZQTqrWSOOHJ/arcgis/rest/services/National_Forests/FeatureServer/0",
-		  outFields: [*],
-		  popupTemplate: template
         });
 
         map.add(nationalForest);
