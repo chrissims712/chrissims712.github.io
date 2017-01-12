@@ -41,17 +41,15 @@
 		  center: [-101.94981250000075, 41.20977753557709],
 		  zoom: 5
         });
-		
-      var templateForest = {
-        title: "National Forest",
-        content: "<p>{FORESTNAME}</p>"+
-		"<ul><li>The size of this forest is {GIS_ACRES} acres.</li></ul>"
-        };
+	
 	  
       var nationalForest = new FeatureLayer({
         url: "https://services.arcgis.com/QWISJZQTqrWSOOHJ/arcgis/rest/services/National_Forests/FeatureServer/0",
         outFields: ["*"],
-        popupTemplate: templateForest
+        popupTemplate: {
+        title: "National Forest",
+        content: "<p>{FORESTNAME}</p>"+
+		"<ul><li>The size of this forest is {GIS_ACRES} acres.</li></ul>"}
       });
 	  
 	  var motorizedTrails = new FeatureLayer({
