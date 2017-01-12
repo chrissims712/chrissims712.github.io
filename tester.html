@@ -23,9 +23,7 @@
     require([
         "esri/Map",
         "esri/views/MapView",
-
         "esri/layers/FeatureLayer",
-
         "dojo/domReady!"
       ],
       function(
@@ -55,11 +53,11 @@
          ********************/
 
         // Carbon storage of trees in Warren Wilson College.
-        var featureLayer = new FeatureLayer({
+        var nationalForest = new FeatureLayer({
           url: "https://services.arcgis.com/QWISJZQTqrWSOOHJ/arcgis/rest/services/National_Forests/FeatureServer/0"
         });
 
-        map.add(featureLayer);
+        map.add(nationalForest);
 
       });
   </script>
