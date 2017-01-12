@@ -46,18 +46,10 @@
       });
 
 		
-      var template = {
-        title: "Marriage in NY, Zip Code: {FORESTNAME}"
-
-      };
 
 		
-		var nationalForest = new FeatureLayer({url: "https://services.arcgis.com/QWISJZQTqrWSOOHJ/arcgis/rest/services/National_Forests/FeatureServer/0",
-		outFields: ["*"],
-		popupTemplate: template
+		var nationalForest = new FeatureLayer({url: "https://services.arcgis.com/QWISJZQTqrWSOOHJ/arcgis/rest/services/National_Forests/FeatureServer/0"
 		});
-		
-		
         map.addLayer(nationalForest);
       });
     </script>
