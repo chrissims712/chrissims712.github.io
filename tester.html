@@ -3,12 +3,11 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
-  <meta name="description" content="[Get started with PopupTemplate - 4.2]">
-  <title>Get started with PopupTemplate - 4.2</title>
-<link rel="stylesheet" href="https://js.arcgis.com/4.2/esri/css/main.css">
-  <script type="text/javascript" src="https://gc.kis.scr.kaspersky-labs.com/1B74BD89-2A22-4B93-B451-1C9E1052A0EC/main.js" charset="UTF-8"></script>
-  <script src="https://js.arcgis.com/4.2/"></script>
-  
+  <title>FeatureLayer - 4.2</title>
+
+  <link rel="stylesheet" href="https://js.arcgis.com/4.2/esri/css/main.css">
+  <script type="text/javascript" src="https://gc.kis.scr.kaspersky-labs.com/1B74BD89-2A22-4B93-B451-1C9E1052A0EC/main.js" charset="UTF-8"></script><script src="https://js.arcgis.com/4.2/"></script>
+
   <style>
     html,
     body,
@@ -22,46 +21,52 @@
 
   <script>
     require([
-      "esri/Map",
-      "esri/layers/FeatureLayer",
-      "esri/views/MapView",
-      "dojo/domReady!"
-    ], function(
-      Map,
-      MapView,
-	  FeatureLayer
-    ) {
+        "esri/Map",
+        "esri/views/MapView",
 
-      // Create the map
-      var map = new Map({
-        basemap: "topo"
-      });
+        "esri/layers/FeatureLayer",
 
-      // Create the MapView
-      var view = new MapView({
-        container: "viewDiv",
-        map: map,
-        extent: {
+        "dojo/domReady!"
+      ],
+      function(
+        Map, MapView,
+        FeatureLayer
+      ) {
+
+        var map = new Map({
+          basemap: "hybrid"
+        });
+
+        var view = new MapView({
+          container: "viewDiv",
+          map: map,
+
+          extent: { // autocasts as new Extent()
             xmin: -9177811,
             ymin: 4247000,
             xmax: -9176791,
-            ymax: 4247784
+            ymax: 4247784,
+            spatialReference: 102100
           }
-      });
+        });
 
-		
+        /********************
+         * Add feature layer
+         ********************/
 
-		
-		var nationalForest = new FeatureLayer({
-			url: "https://services.arcgis.com/QWISJZQTqrWSOOHJ/arcgis/rest/services/National_Forests/FeatureServer/0"
-		});
-        map.add(nationalForest);
+        // Carbon storage of trees in Warren Wilson College.
+        var featureLayer = new FeatureLayer({
+          url: "https://services.arcgis.com/QWISJZQTqrWSOOHJ/arcgis/rest/services/National_Forests/FeatureServer/0"
+        });
+
+        map.add(featureLayer);
+
       });
-    </script>
-  </head>
-  
-  <body>
-    <div id="viewDiv"></div>
-  </body>
+  </script>
+</head>
+
+<body>
+  <div id="viewDiv"></div>
+</body>
 
 </html>
