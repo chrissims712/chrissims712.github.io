@@ -1,39 +1,50 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    
-    <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no">
-    <title>Popup</title>
-	<link rel="stylesheet" href="https://js.arcgis.com/4.2/esri/css/main.css">
-    <style>
-      html, body, #viewDiv {
-        padding: 0;
-        margin: 0;
-        height: 100%;
-      }
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+  <meta name="description" content="[Get started with PopupTemplate - 4.2]">
+  <title>Get started with PopupTemplate - 4.2</title>
 
-    </style>
-	<script src="https://js.arcgis.com/4.2/"></script>
-    <script>
+  <style>
+    html,
+    body,
+    #viewDiv {
+      padding: 0;
+      margin: 0;
+      height: 100%;
+      width: 100%;
+    }
+  </style>
 
-      require(["esri/Map", 
-	  "esri/layers/FeatureLayer", 
-	  "esri/views/MapView",
-	  "dojo/domReady!"
-	  ], 
-	  function(Map, FeatureLayer, MapView) {
-		
-		map = new Map({
-			basemap: "topo"
-        });
-		
-		var view = new MapView({
-		container: "viewDiv",
-		map: map,
-		center: [-95.249, 38.954],
-		zoom: 7
-		});
+  <link rel="stylesheet" href="https://js.arcgis.com/4.2/esri/css/main.css">
+  <script type="text/javascript" src="https://gc.kis.scr.kaspersky-labs.com/1B74BD89-2A22-4B93-B451-1C9E1052A0EC/main.js" charset="UTF-8"></script><script src="https://js.arcgis.com/4.2/"></script>
+
+  <script>
+    require([
+      "esri/Map",
+      "esri/layers/FeatureLayer",
+      "esri/views/MapView",
+      "dojo/domReady!"
+    ], function(
+      Map,
+      FeatureLayer,
+      MapView
+    ) {
+
+      // Create the map
+      var map = new Map({
+        basemap: "gray"
+      });
+
+      // Create the MapView
+      var view = new MapView({
+        container: "viewDiv",
+        map: map,
+        center: [-73.950, 40.702],
+        zoom: 11
+      });
+
 		
 		var template = {
 			title: "{FORESTNAME}",
@@ -54,7 +65,7 @@
     </script>
   </head>
   
-  <body class="claro">
+  <body>
     <div id="viewDiv"></div>
   </body>
 
