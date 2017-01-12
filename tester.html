@@ -5,52 +5,57 @@
     
     <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no">
     <title>Popup</title>
-
-    <link rel="stylesheet" href="https://js.arcgis.com/3.19/dijit/themes/claro/claro.css">
-    <link rel="stylesheet" href="https://js.arcgis.com/3.19/esri/css/esri.css">
+	<link rel="stylesheet" href="https://js.arcgis.com/4.2/esri/css/main.css">
     <style>
-      html, body, #map {
+      html, body, #viewDiv {
         padding: 0;
         margin: 0;
         height: 100%;
       }
 
     </style>
-    <script type="text/javascript" src="https://gc.kis.scr.kaspersky-labs.com/1B74BD89-2A22-4B93-B451-1C9E1052A0EC/main.js" charset="UTF-8"></script><script src="https://js.arcgis.com/3.19/"></script>
+	<script src="https://js.arcgis.com/4.2/"></script>
     <script>
-      var map;
 
-      require(["esri/map", 
+      require(["esri/Map", 
 	  "esri/layers/FeatureLayer", 
-	  "esri/dijit/Popup",
-	  "dojo/dom-construct",
+	  "esri/views/MapView",
 	  "dojo/domReady!"
 	  ], 
-	  function(Map, FeatureLayer, Popup, domConstruct) {
+	  function(Map, FeatureLayer, MapView) {
 		
-		map = new Map("map", {
-			basemap: "topo",
-			center: [-95.249, 38.954],
-			zoom: 7,
-			slider: true,
-			infoWindow: popup
+		map = new Map({
+			basemap: "topo"
         });
 		
-		var popup = new Popup({
-			null},
-			domConstruct.create("div"));
-			
+		var view = new MapView({
+		container: "viewDiv",
+		map: map,
+		center: [-95.249, 38.954],
+		zoom: 7
+		});
 		
-		var nationalForest = new FeatureLayer("https://services.arcgis.com/QWISJZQTqrWSOOHJ/arcgis/rest/services/National_Forests/FeatureServer/0");
+		var template = {
+			title: "{FORESTNAME}",
+			content: "{FORESTNAME}",
+			fieldInfo: [{
+			fieldName: "FORESTNAME"
+			}]
+		};
+		
+		var nationalForest = new FeatureLayer({url: "https://services.arcgis.com/QWISJZQTqrWSOOHJ/arcgis/rest/services/National_Forests/FeatureServer/0",
+		outFields: ["FORESTNAME",
+		popupTemplate: template
+		});
 		
 		
-        map.addLayer(featureLayer);
+        map.addLayer(nationalForest);
       });
     </script>
   </head>
   
   <body class="claro">
-    <div id="map"></div>
+    <div id="viewDiv"></div>
   </body>
 
 </html>
