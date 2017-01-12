@@ -48,9 +48,10 @@
 		
 
 		
-		var nationalForest = new FeatureLayer({url: "https://services.arcgis.com/QWISJZQTqrWSOOHJ/arcgis/rest/services/National_Forests/FeatureServer/0"
+		var nationalForest = new FeatureLayer({
+			url:  "https://services.arcgis.com/QWISJZQTqrWSOOHJ/arcgis/rest/services/National_Forests/FeatureServer/0"
 		});
-        map.addLayer(nationalForest);
+        map.add(nationalForest);
       });
     </script>
   </head>
