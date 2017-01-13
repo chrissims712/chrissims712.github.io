@@ -61,8 +61,18 @@
 		"<ul><li>This trail is called {Segment_Rating}.</li></ul>"}
       });
 	  
+	  	  var hikingTrails = new FeatureLayer({
+        url: "https://services.arcgis.com/QWISJZQTqrWSOOHJ/arcgis/rest/services/Trails_Full_Hiking/FeatureServer/0",
+		outFields: ["*"],
+		popupTemplate: {
+        title: "National Forest Trails for hiking use.",
+        content: "<p>{TRAIL_NAME}</p>"+
+		"<ul><li>This trail is called {TRAIL_NAME}.</li></ul>"}
+      });
+	  
       map.add(nationalForest);
 	  map.add(hikeBikeTrails);
+	  map.add(hikingTrails);
     });
   </script>
 </head>
