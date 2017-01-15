@@ -35,7 +35,7 @@
         map.on("load", initOperationalLayer);
 
         function initOperationalLayer() {
-          var infoTemplate = new InfoTemplate("${TRAIL_NAME}", "{Segment_Rating}");
+          var infoTemplate = new InfoTemplate("${TRAIL_NAME}", "${Segment_Rating}");
           var featureLayer = new FeatureLayer("https://services.arcgis.com/QWISJZQTqrWSOOHJ/arcgis/rest/services/Trail_Clip_NonMotorized/FeatureServer/0",{
             mode: FeatureLayer.MODE_ONDEMAND,
             outFields: ["*"],
