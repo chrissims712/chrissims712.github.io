@@ -58,8 +58,13 @@
             outFields: ["*"],
             infoTemplate: infoMoto
 			});
+          var motoNATrails = new FeatureLayer("https://services.arcgis.com/QWISJZQTqrWSOOHJ/arcgis/rest/services/Trails_NA_Clipped/FeatureServer/0",{
+            mode: FeatureLayer.MODE_ONDEMAND,
+            outFields: ["*"],
+            infoTemplate: infoTrail
+			});
 			
-          map.addLayers([motorizedNotAvailable, hikingTrails, motorizedTrails, nationalForest]);
+          map.addLayers([motorizedNotAvailable, hikingTrails, motorizedTrails, motoNATrails, nationalForest]);
         }
       });
     </script>
