@@ -36,8 +36,8 @@
 
         function initOperationalLayer() {
           var infoTrail = new InfoTemplate("${TRAIL_NAME}", "<p>This segment is rated ${Segment_Rating}.</p>"+
-		  "<ul><li>Elevation: {Elevation_feet}.</li>"+
-		  "<li>Slope: {Slope}.</li>");
+		  "<ul><li>Elevation: ${Elevation_feet}.</li>"+
+		  "<li>Slope: ${Slope}.</li>");
 		  var infoForest = new InfoTemplate("${FORESTNAME}");
 		  var infoMoto = new InfoTemplate("${TRAIL_NAME}");
           var motorizedNotAvailable = new FeatureLayer("https://services.arcgis.com/QWISJZQTqrWSOOHJ/arcgis/rest/services/Trails_Full_NA/FeatureServer/0",{
