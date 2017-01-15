@@ -35,14 +35,20 @@
         map.on("load", initOperationalLayer);
 
         function initOperationalLayer() {
-          var infoTemplate = new InfoTemplate("${TRAIL_NAME}", "${Segment_Rating}");
-          var featureLayer = new FeatureLayer("https://services.arcgis.com/QWISJZQTqrWSOOHJ/arcgis/rest/services/Trail_Clip_NonMotorized/FeatureServer/0",{
+          var infoTemplate = new InfoTemplate("${TRAIL_NAME}", "This segment is rated ${Segment_Rating}");
+          var nonMotorized = new FeatureLayer("https://services.arcgis.com/QWISJZQTqrWSOOHJ/arcgis/rest/services/Trail_Clip_NonMotorized/FeatureServer/0",{
             mode: FeatureLayer.MODE_ONDEMAND,
             outFields: ["*"],
             infoTemplate: infoTemplate
+		 var infoTemplate2 = new InfoTemplate("${TRAIL_NAME}", "This segment is rated ${Segment_Rating}");
+          var motorizedNotAvailable = new FeatureLayer("https://services.arcgis.com/QWISJZQTqrWSOOHJ/arcgis/rest/services/Trails_Full_NA/FeatureServer/0",{
+            mode: FeatureLayer.MODE_ONDEMAND,
+            outFields: ["*"],
+            infoTemplate: infoTemplate2
           });
 
-          map.addLayer(featureLayer);
+          map.addLayer(nonMotorized);
+		  map.addLayer(motorizedNotAvailable);
         }
       });
     </script>
