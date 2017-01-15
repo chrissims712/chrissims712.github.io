@@ -35,18 +35,31 @@
         map.on("load", initOperationalLayer);
 
         function initOperationalLayer() {
-          var infoTemplate = new InfoTemplate("${TRAIL_NAME}", "This segment is rated ${Segment_Rating}");
-          var nonMotorized = new FeatureLayer("https://services.arcgis.com/QWISJZQTqrWSOOHJ/arcgis/rest/services/Trail_Clip_NonMotorized/FeatureServer/0",{
-            mode: FeatureLayer.MODE_ONDEMAND,
-            outFields: ["*"],
-            infoTemplate: infoTemplate});
+          var infoTrail = new InfoTemplate("${TRAIL_NAME}", "This segment is rated ${Segment_Rating}.");
+		  var infoForest = new InfoTemplate("${FORESTNAME}");
+		  var infoMoto = new InfoTemplate("${TRAIL_NAME}");
           var motorizedNotAvailable = new FeatureLayer("https://services.arcgis.com/QWISJZQTqrWSOOHJ/arcgis/rest/services/Trails_Full_NA/FeatureServer/0",{
             mode: FeatureLayer.MODE_ONDEMAND,
             outFields: ["*"],
-            infoTemplate: infoTemplate
+            infoTemplate: infoTrail
+			});
+          var hikingTrails = new FeatureLayer("https://services.arcgis.com/QWISJZQTqrWSOOHJ/arcgis/rest/services/Trail_Clip_Hiking/FeatureServer/0",{
+            mode: FeatureLayer.MODE_ONDEMAND,
+            outFields: ["*"],
+            infoTemplate: infoTrail
+			});
+		  var nationalForest = new FeatureLayer("https://services.arcgis.com/QWISJZQTqrWSOOHJ/arcgis/rest/services/National_Forests/FeatureServer/0",{
+			mode: FeatureLayer.MODE_ONDEMAND,
+			outFields: ["*"],
+			infoTemplate: infoForest
           });
-
-          map.addLayers([nonMotorized, motorizedNotAvailable]);
+          var motorizedTrails = new FeatureLayer("https://services.arcgis.com/QWISJZQTqrWSOOHJ/arcgis/rest/services/Trails_Full_Motorized/FeatureServer/0",{
+            mode: FeatureLayer.MODE_ONDEMAND,
+            outFields: ["*"],
+            infoTemplate: infoMoto
+			});
+			
+          map.addLayers([motorizedNotAvailable, hikingTrails, motorizedTrails, nationalForest]);
         }
       });
     </script>
