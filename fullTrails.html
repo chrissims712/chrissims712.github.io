@@ -33,13 +33,16 @@
         });
 
         map.on("load", initOperationalLayer);
+		map.on("load", initOperationalLayer2);
 
         function initOperationalLayer() {
           var infoTemplate = new InfoTemplate("${TRAIL_NAME}", "This segment is rated ${Segment_Rating}");
           var nonMotorized = new FeatureLayer("https://services.arcgis.com/QWISJZQTqrWSOOHJ/arcgis/rest/services/Trail_Clip_NonMotorized/FeatureServer/0",{
             mode: FeatureLayer.MODE_ONDEMAND,
             outFields: ["*"],
-            infoTemplate: infoTemplate);
+            infoTemplate: infoTemplate
+			});
+		function initOperationalLayer2() {
 		 var infoTemplate2 = new InfoTemplate("${TRAIL_NAME}", "This segment is rated ${Segment_Rating}");
           var motorizedNotAvailable = new FeatureLayer("https://services.arcgis.com/QWISJZQTqrWSOOHJ/arcgis/rest/services/Trails_Full_NA/FeatureServer/0",{
             mode: FeatureLayer.MODE_ONDEMAND,
