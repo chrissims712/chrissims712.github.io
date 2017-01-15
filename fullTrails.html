@@ -14,15 +14,29 @@
         margin:0;
         height:100%;
       }
+	  #search {
+		display: black;
+		position: absolute;
+		z-index: 2;
+		top: 20px;
+		left: 74px;
+	}
     </style>
     <script src="https://js.arcgis.com/3.19/"></script>
     <script>
       var map;
       require([
-        "esri/map", "esri/InfoTemplate", "esri/layers/FeatureLayer",
-        "dojo/parser", "dojo/domReady!"
+        "esri/map", 
+		"esri/InfoTemplate", 
+		"esri/layers/FeatureLayer",
+        "dojo/parser",
+		"esri/dijit/Search",
+		"dojo/domReady!"
       ], function(
-        Map, InfoTemplate, FeatureLayer,
+        Map, 
+		InfoTemplate, 
+		FeatureLayer,
+		Search,
         parser
       ) {
         parser.parse();
@@ -36,8 +50,8 @@
 
         function initOperationalLayer() {
           var infoTrail = new InfoTemplate("${TRAIL_NAME}", "<p>This segment is rated ${Segment_Rating}.</p>"+
-		  "<ul><li>Elevation: ${Elevation_feet}.</li>"+
-		  "<li>Slope: ${Slope}.</li>");
+		  "<ul><li>Elevation: ${Elevation_feet} feet.</li>"+
+		  "<li>Slope: ${Slope}.</li></ul>");
 		  var infoForest = new InfoTemplate("${FORESTNAME}");
 		  var infoMoto = new InfoTemplate("${TRAIL_NAME}");
           var motorizedNotAvailable = new FeatureLayer("https://services.arcgis.com/QWISJZQTqrWSOOHJ/arcgis/rest/services/Trails_Full_NA/FeatureServer/0",{
@@ -69,9 +83,20 @@
           map.addLayers([motorizedNotAvailable, hikingTrails, motorizedTrails, motoNATrails, nationalForest]);
         }
       });
+		var search = new Search({
+			enableButtonMode: true,
+			enableLabel: false,
+			enableInfoWindow: true,
+			showInfoWindowOnSelect: false,
+			map: mapDiv
+			}, "search");
+			search.startup();
+			
+		});
     </script>
   </head>
   <body class="claro">
+	<div id="search"></div>
     <div id="mapDiv">
     </div>
   </body>
