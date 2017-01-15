@@ -54,11 +54,11 @@
 
 	  //Below is larger feature
 	  	  var hikingTrails = new FeatureLayer({
-        url: "https://services.arcgis.com/QWISJZQTqrWSOOHJ/arcgis/rest/services/NAMotorizedDissolved/FeatureServer/0",
+        url: "https://services.arcgis.com/QWISJZQTqrWSOOHJ/arcgis/rest/services/Trail_Clip_NonMotorized/FeatureServer/0",
 		outFields: ["*"],
 		popupTemplate: {
         title: "National Forest Trails for hiking use.",
-        content: "<p>This is the dissolved feature.</p>"+
+        content: "<p>This is the nonMotorized feature.</p>"+
 		"<ul><li>This trail is rated {Segment_Rating}.</li></ul>"}
       });
 	  
