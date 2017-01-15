@@ -1,56 +1,55 @@
 <!DOCTYPE html>
 <html>
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>FeatureLayer</title>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
+    
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no">
+    <title>FeatureLayer On Demand</title>
 
-<link rel="stylesheet" href="https://js.arcgis.com/3.19/esri/css/esri.css">
-<script src="https://js.arcgis.com/3.19/"></script>
+    <link rel="stylesheet" href="https://js.arcgis.com/3.19/dijit/themes/claro/claro.css">
+    <link rel="stylesheet" href="https://js.arcgis.com/3.19/esri/css/esri.css">
+    <style>
+      html, body, #mapDiv {
+        padding:0;
+        margin:0;
+        height:100%;
+      }
+    </style>
+    <script src="https://js.arcgis.com/3.19/"></script>
+    <script>
+      var map;
+      require([
+        "esri/map", "esri/InfoTemplate", "esri/layers/FeatureLayer",
+        "dojo/parser", "dojo/domReady!"
+      ], function(
+        Map, InfoTemplate, FeatureLayer,
+        parser
+      ) {
+        parser.parse();
+        map = new Map("mapDiv", {
+          basemap: "topo",
+          center: [-96.541, 38.34],
+          zoom: 6
+        });
 
-<style>
-html, body, #map {
-  padding: 0;
-  margin: 0;
-  height: 100%;
-  width: 100%;
-}
-</style>
+        map.on("load", initOperationalLayer);
 
-<script>
-require([
-    "esri/map",
-    "esri/layers/FeatureLayer",
-    "dojo/domReady!"
-  ],
-  function(
-    Map,
-    FeatureLayer
-  ) {
+        function initOperationalLayer() {
+          var infoTemplate = new InfoTemplate("${TRAIL_NAME}", "{Segment_Rating");
+          var featureLayer = new FeatureLayer("https://services.arcgis.com/QWISJZQTqrWSOOHJ/arcgis/rest/services/Trail_Clip_NonMotorized/FeatureServer/0",{
+            mode: FeatureLayer.MODE_ONDEMAND,
+            outFields: ["*"],
+            infoTemplate: infoTemplate
+          });
 
-    var map = new Map("map", {
-      basemap: "hybrid",
-      center: [-101.94981250000075, 41.20977753557709],
-	  zoom: 5
-    });
-
-    /****************************************************************
-     * Add feature layer - A FeatureLayer at minimum should point
-     * to a URL to a feature service or point to a feature collection 
-     * object.
-     ***************************************************************/
-
-    // Carbon storage of trees in Warren Wilson College.
-    var featureLayer = new FeatureLayer("https://services.arcgis.com/QWISJZQTqrWSOOHJ/arcgis/rest/services/Trail_Clip_NonMotorized/FeatureServer/0");
-
-    map.addLayer(featureLayer);
-
-  });
-</script>
-</head>
-
-<body>
-  <div id="map"></div>
-</body>
-
+          map.addLayer(featureLayer);
+          map.infoWindow.resize(155,75);
+        }
+      });
+    </script>
+  </head>
+  <body class="claro">
+    <div id="mapDiv">
+    </div>
+  </body>
 </html>

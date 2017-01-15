@@ -45,7 +45,7 @@
 	  
       var nationalForest = new FeatureLayer({
         url: "https://services.arcgis.com/QWISJZQTqrWSOOHJ/arcgis/rest/services/National_Forests/FeatureServer/0",
-        outFields: ["*"],
+        outFields: ["{FORESTNAME}"],
         popupTemplate: {
         title: "National Forest",
         content: "<p>{FORESTNAME}</p>"+
