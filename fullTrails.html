@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://js.arcgis.com/3.19/dijit/themes/claro/claro.css">
     <link rel="stylesheet" href="https://js.arcgis.com/3.19/esri/css/esri.css">
     <style>
-      html, body, #mapDiv {
+      html, body, #map {
         padding:0;
         margin:0;
         height:100%;
@@ -40,7 +40,7 @@
         parser
       ) {
         parser.parse();
-        map = new Map("mapDiv", {
+        map = new map("mapDiv", {
           basemap: "hybrid",
           center: [-96.541, 38.34],
           zoom: 6
@@ -85,7 +85,7 @@
      
 		var search = new Search({
 			enableLabel: false,
-			map: mapDiv
+			map: map
 			}, "search");
 			
 		var sources = search.get("sources");
@@ -114,6 +114,6 @@
   </head>
   <body class="claro">
 	<div id="search"></div>
-    <div id="mapDiv"></div>
+    <div id="map"></div>
   </body>
 </html>
