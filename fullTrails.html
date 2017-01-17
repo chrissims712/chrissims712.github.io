@@ -30,11 +30,13 @@
 		"esri/InfoTemplate", 
 		"esri/layers/FeatureLayer",
         "dojo/parser",
+		"esri/dijit/Search",
 		"dojo/domReady!"
       ], function(
         Map, 
 		InfoTemplate, 
 		FeatureLayer,
+		Search,
         parser
       ) {
         parser.parse();
@@ -81,6 +83,31 @@
           map.addLayers([motorizedNotAvailable, hikingTrails, motorizedTrails, motoNATrails, nationalForest]);
         }
      
+		var search = new Search({
+			enableLabel: false,
+			map: mapDiv
+			}, "search");
+			
+		var sources = search.get("sources");
+		
+		sources.push({
+			featureLayer: nationalForest,
+			searchFields: ["FORESTNAME"],
+			displayField: "FORESTNAME",
+			exactMatch: false,
+			outFields: ["FORESTNAME"],
+			name: "National Forest",
+			placeholder: "Name",
+			maxResults: 2,
+			maxSuggestions: 2,
+			infoTemplate: infoForest,
+			enableSuggestions: true,
+			minCharacters: 0
+			});
+		
+		search.set("sources", sources);
+			
+		search.startup();
 			
 		});
     </script>
