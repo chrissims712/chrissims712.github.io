@@ -37,10 +37,10 @@
 		InfoTemplate, 
 		FeatureLayer,
 		Search,
-        parser
+		parser
       ) {
-        parser.parse();
-        map = new map("mapDiv", {
+		parser: parse();
+        map = new Map("map", {
           basemap: "hybrid",
           center: [-96.541, 38.34],
           zoom: 6
