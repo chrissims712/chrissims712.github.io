@@ -30,13 +30,11 @@
 		"esri/InfoTemplate", 
 		"esri/layers/FeatureLayer",
         "dojo/parser",
-		"esri/dijit/Search",
 		"dojo/domReady!"
       ], function(
         Map, 
 		InfoTemplate, 
 		FeatureLayer,
-		Search,
         parser
       ) {
         parser.parse();
@@ -83,14 +81,6 @@
           map.addLayers([motorizedNotAvailable, hikingTrails, motorizedTrails, motoNATrails, nationalForest]);
         }
      
-		var search = new Search({
-			enableButtonMode: true,
-			enableLabel: false,
-			enableInfoWindow: true,
-			showInfoWindowOnSelect: false,
-			map: mapDiv
-			}, "search");
-			search.startup();
 			
 		});
     </script>
