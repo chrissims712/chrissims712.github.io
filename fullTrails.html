@@ -91,7 +91,7 @@
 		var sources = search.get("sources");
 		
 		sources.push({
-			featureLayer: nationalForest,
+			featureLayer: new FeatureLayer("https://services.arcgis.com/QWISJZQTqrWSOOHJ/arcgis/rest/services/National_Forests/FeatureServer/0"),
 			searchFields: ["FORESTNAME"],
 			displayField: "FORESTNAME",
 			exactMatch: false,
@@ -100,7 +100,7 @@
 			placeholder: "Name",
 			maxResults: 2,
 			maxSuggestions: 2,
-			infoTemplate: infoForest,
+			infoTemplate: new InfoTemplate("{FORESTNAME}"),
 			enableSuggestions: true,
 			minCharacters: 0
 			});
@@ -114,7 +114,6 @@
   </head>
   <body class="claro">
 	<div id="search"></div>
-    <div id="mapDiv">
-    </div>
+    <div id="mapDiv"></div>
   </body>
 </html>
