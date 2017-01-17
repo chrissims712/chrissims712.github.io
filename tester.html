@@ -1,84 +1,92 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
-  <title>Map Test Page</title>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
+    
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no">
+    <title>Layers without search</title>
 
-  <link rel="stylesheet" href="https://js.arcgis.com/4.2/esri/css/main.css">
-  <script type="text/javascript" src="https://gc.kis.scr.kaspersky-labs.com/1B74BD89-2A22-4B93-B451-1C9E1052A0EC/main.js" charset="UTF-8"></script><script src="https://js.arcgis.com/4.2/"></script>
-
-  <style>
-    html,
-    body,
-    #viewDiv {
-      padding: 0;
-      margin: 0;
-      height: 100%;
-      width: 100%;
-    }
-  </style>
-
-  <script>
-  require([
-        "esri/Map",
-        "esri/views/MapView",
-        "esri/layers/FeatureLayer",
-        "dojo/domReady!"
-      ],
-      function(
-        Map, MapView,
-        FeatureLayer
+    <link rel="stylesheet" href="https://js.arcgis.com/3.19/dijit/themes/claro/claro.css">
+    <link rel="stylesheet" href="https://js.arcgis.com/3.19/esri/css/esri.css">
+    <style>
+      html, body, #map {
+        padding:0;
+        margin:0;
+        height:100%;
+      }
+	  #search {
+		display: black;
+		position: absolute;
+		z-index: 2;
+		top: 20px;
+		left: 74px;
+	}
+    </style>
+    <script src="https://js.arcgis.com/3.19/"></script>
+    <script>
+      var map;
+      require([
+        "esri/map", 
+		"esri/InfoTemplate", 
+		"esri/layers/FeatureLayer",
+        "dojo/parser",
+		"dojo/domReady!"
+      ], function(
+        Map, 
+		InfoTemplate, 
+		FeatureLayer,
+		parser
       ) {
-
-        var map = new Map({
-          basemap: "hybrid"
+		parser: parse();
+        map = new Map("map", {
+          basemap: "hybrid",
+          center: [-96.541, 38.34],
+          zoom: 6
         });
 
-        var view = new MapView({
-          container: "viewDiv",
-          map: map,
-		  center: [-101.94981250000075, 41.20977753557709],
-		  zoom: 5
-        });
-	
-	  
-      var nationalForest = new FeatureLayer({
-        url: "https://services.arcgis.com/QWISJZQTqrWSOOHJ/arcgis/rest/services/National_Forests/FeatureServer/0",
-        outFields: ["{FORESTNAME}"],
-        popupTemplate: {
-        title: "National Forest",
-        content: "<p>{FORESTNAME}</p>"+
-		"<ul><li>The size of this forest is {GIS_ACRES} acres.</li></ul>"}
-      });
-	  //Below is smaller feature
-	  var hikeBikeTrails = new FeatureLayer({
-        url: "https://services.arcgis.com/QWISJZQTqrWSOOHJ/arcgis/rest/services/Trail_Clip_Hiking/FeatureServer/0",
-		outField: ["*"],
-		popupTemplate: {
-        title: "National Forest Trails for hiking and biking.",
-        content: "<p>The name of this trail is {TRAIL_NAME}.</p>"+
-		"<ul><li>This trail is rated {Segment_Rating}.</li></ul>"}
-      });
-	  //Below is larger feature
-	  	  var hikingTrails = new FeatureLayer({
-        url: "https://services.arcgis.com/QWISJZQTqrWSOOHJ/arcgis/rest/services/Trail_Clip_NonMotorized/FeatureServer/0",
-		outFields: ["*"],
-		popupTemplate: {
-        title: "National Forest Trails for hiking use.",
-        content: "<p>{TRAIL_NAME}</p>"+
-		"<ul><li>This trail is called {TRAIL_NAME}.</li></ul>"}
-      });
-	  
-      map.add(nationalForest);
-	  map.add(hikeBikeTrails);
-	  map.add(hikingTrails);
-    });
-  </script>
-</head>
+        map.on("load", initOperationalLayer);
 
-<body>
-  <div id="viewDiv"></div>
-</body>
-
+        function initOperationalLayer() {
+          var infoTrail = new InfoTemplate("${TRAIL_NAME}", "<p>This segment is rated ${Segment_Rating}.</p>"+
+		  "<ul><li>Elevation: ${Elevation_feet} feet.</li>"+
+		  "<li>Slope: ${Slope}.</li></ul>");
+		  var infoForest = new InfoTemplate("${FORESTNAME}");
+		  var infoMoto = new InfoTemplate("${TRAIL_NAME}");
+          var motorizedNotAvailable = new FeatureLayer("https://services.arcgis.com/QWISJZQTqrWSOOHJ/arcgis/rest/services/Trails_Full_NA/FeatureServer/0",{
+            mode: FeatureLayer.MODE_ONDEMAND,
+            outFields: ["*"],
+            infoTemplate: infoTrail
+			});
+          var hikingTrails = new FeatureLayer("https://services.arcgis.com/QWISJZQTqrWSOOHJ/arcgis/rest/services/Trail_Clip_Hiking/FeatureServer/0",{
+            mode: FeatureLayer.MODE_ONDEMAND,
+            outFields: ["*"],
+            infoTemplate: infoTrail
+			});
+		  var nationalForest = new FeatureLayer("https://services.arcgis.com/QWISJZQTqrWSOOHJ/arcgis/rest/services/National_Forests/FeatureServer/0",{
+			mode: FeatureLayer.MODE_ONDEMAND,
+			outFields: ["*"],
+			infoTemplate: infoForest
+          });
+          var motorizedTrails = new FeatureLayer("https://services.arcgis.com/QWISJZQTqrWSOOHJ/arcgis/rest/services/Trails_Full_Motorized/FeatureServer/0",{
+            mode: FeatureLayer.MODE_ONDEMAND,
+            outFields: ["*"],
+            infoTemplate: infoMoto
+			});
+          var motoNATrails = new FeatureLayer("https://services.arcgis.com/QWISJZQTqrWSOOHJ/arcgis/rest/services/Trails_NA_Clipped/FeatureServer/0",{
+            mode: FeatureLayer.MODE_ONDEMAND,
+            outFields: ["*"],
+            infoTemplate: infoTrail
+			});
+			
+          map.addLayers([motorizedNotAvailable, hikingTrails, motorizedTrails, motoNATrails, nationalForest]);
+        }
+    
+			
+		});
+    </script>
+  </head>
+  <body class="claro">
+	<div id="search"></div>
+    <div id="map"></div>
+  </body>
 </html>
