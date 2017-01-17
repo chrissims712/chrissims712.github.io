@@ -24,31 +24,27 @@
     </style>
     <script src="https://js.arcgis.com/3.19/"></script>
     <script>
-      var map;
+	var map;
       require([
         "esri/map", 
 		"esri/InfoTemplate", 
 		"esri/layers/FeatureLayer",
-        "dojo/parser",
 		"esri/dijit/Search",
 		"dojo/domReady!"
       ], function(
         Map, 
 		InfoTemplate, 
 		FeatureLayer,
-		Search,
-		parser
-      ) {
-		parser: parse();
+		Search
+		) {
+
         map = new Map("map", {
           basemap: "hybrid",
           center: [-96.541, 38.34],
           zoom: 6
         });
 
-        map.on("load", initOperationalLayer);
 
-        function initOperationalLayer() {
           var infoTrail = new InfoTemplate("${TRAIL_NAME}", "<p>This segment is rated ${Segment_Rating}.</p>"+
 		  "<ul><li>Elevation: ${Elevation_feet} feet.</li>"+
 		  "<li>Slope: ${Slope}.</li></ul>");
@@ -81,7 +77,7 @@
 			});
 			
           map.addLayers([motorizedNotAvailable, hikingTrails, motorizedTrails, motoNATrails, nationalForest]);
-        }
+       
      
 		var search = new Search({
 			enableLabel: false,
@@ -91,7 +87,7 @@
 		var sources = search.get("sources");
 		
 		sources.push({
-			featureLayer: new FeatureLayer("https://services.arcgis.com/QWISJZQTqrWSOOHJ/arcgis/rest/services/National_Forests/FeatureServer/0"),
+			featureLayer: nationalForest,
 			searchFields: ["FORESTNAME"],
 			displayField: "FORESTNAME",
 			exactMatch: false,
@@ -109,6 +105,7 @@
 			
 		search.startup();
 			
+        search.distroy();
 		});
     </script>
   </head>

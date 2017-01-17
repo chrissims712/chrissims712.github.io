@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://js.arcgis.com/3.19/dijit/themes/claro/claro.css">
     <link rel="stylesheet" href="https://js.arcgis.com/3.19/esri/css/esri.css">
     <style>
-      html, body, #map {
+      html, body, #mapDiv {
         padding:0;
         margin:0;
         height:100%;
@@ -32,13 +32,13 @@
         "dojo/parser",
 		"dojo/domReady!"
       ], function(
-        Map, 
-		InfoTemplate, 
+        Map,
+		InfoTemplate,
 		FeatureLayer,
 		parser
       ) {
 		parser: parse();
-        map = new Map("map", {
+        map = new Map("mapDiv", {
           basemap: "hybrid",
           center: [-96.541, 38.34],
           zoom: 6
@@ -87,6 +87,6 @@
   </head>
   <body class="claro">
 	<div id="search"></div>
-    <div id="map"></div>
+    <div id="mapDiv"></div>
   </body>
 </html>
