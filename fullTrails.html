@@ -39,7 +39,7 @@
 		) {
 
         map = new Map("map", {
-          basemap: "hybrid",
+          basemap: "topo",
           center: [-96.541, 38.34],
           zoom: 6
         });
@@ -51,11 +51,7 @@
 		  var infoForest = new InfoTemplate("National Forest", "<p>This forest is: ${FORESTNAME}.</p>");
 		  var infoMoto = new InfoTemplate("${TRAIL_NAME}");
         
-          var motorizedNotAvailable = new FeatureLayer("https://services.arcgis.com/QWISJZQTqrWSOOHJ/arcgis/rest/services/Trails_Full_NA/FeatureServer/0",{
-            mode: FeatureLayer.MODE_ONDEMAND,
-            outFields: ["*"],
-            infoTemplate: infoTrail
-			});
+
           var hikingTrails = new FeatureLayer("https://services.arcgis.com/QWISJZQTqrWSOOHJ/arcgis/rest/services/Trail_Clip_Hiking/FeatureServer/0",{
             mode: FeatureLayer.MODE_ONDEMAND,
             outFields: ["*"],
@@ -77,7 +73,7 @@
             infoTemplate: infoTrail
 			});
 			
-          map.addLayers([motorizedNotAvailable, hikingTrails, motorizedTrails, motoNATrails, nationalForest]);
+          map.addLayers([hikingTrails, motorizedTrails, motoNATrails, nationalForest]);
        
      
 		var search = new Search({
@@ -86,30 +82,15 @@
 			}, "search");
 			
 		var sources = search.get("sources");
-		
+
 		sources.push({
-			featureLayer: motorizedTrails,
+			featureLayer: new FeatureLayer("https://services.arcgis.com/QWISJZQTqrWSOOHJ/arcgis/rest/services/TrailsFullMotorizedNotAvailable/FeatureServer/0"),
 			searchFields: ["TRAIL_NAME"],
 			displayField: "TRAIL_NAME",
 			exactMatch: false,
 			outFields: ["TRAIL_NAME"],
-			name: "Trail Name",
+			name: "Unspecified Trails",
 			placeholder: "Name",
-			maxResults: 2,
-			maxSuggestions: 2,
-			infoTemplate: infoMoto,
-			enableSuggestions: true,
-			minCharacters: 0
-			});
-		
-		sources.push({
-			featureLayer: motorizedNotAvailable,
-			searchFields: ["TRAIL_NAME"],
-			displayField: "TRAIL_NAME",
-			exactMatch: false,
-			outFields: ["TRAIL_NAME"],
-			name: "Trail Name",
-			placeholder: "Title",
 			maxResults: 2,
 			maxSuggestions: 2,
 			infoTemplate: infoMoto,
@@ -117,13 +98,28 @@
 			minCharacters: 0
 			});        
         
+		sources.push({
+			featureLayer: motorizedTrails,
+			searchFields: ["TRAIL_NAME"],
+			displayField: "TRAIL_NAME",
+			exactMatch: false,
+			outFields: ["TRAIL_NAME"],
+			name: "Motorized Trails",
+			placeholder: "Name",
+			maxResults: 2,
+			maxSuggestions: 2,
+			infoTemplate: infoMoto,
+			enableSuggestions: true,
+			minCharacters: 0
+			});       
+        
  		sources.push({
 			featureLayer: new FeatureLayer("https://services.arcgis.com/QWISJZQTqrWSOOHJ/arcgis/rest/services/Trails_Full_Hiking/FeatureServer/0"),
 			searchFields: ["TRAIL_NAME"],
 			displayField: "TRAIL_NAME",
 			exactMatch: false,
 			outFields: ["TRAIL_NAME"],
-			name: "Hiking Trail Name",
+			name: "Hiking Trails",
 			placeholder: "Name",
 			maxResults: 2,
 			maxSuggestions: 2,
@@ -138,7 +134,7 @@
 			displayField: "FORESTNAME",
 			exactMatch: false,
 			outFields: ["FORESTNAME"],
-			name: "National Forest",
+			name: "National Forests",
 			placeholder: "Name",
 			maxResults: 2,
 			maxSuggestions: 2,
