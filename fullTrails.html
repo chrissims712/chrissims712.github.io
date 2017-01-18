@@ -48,8 +48,9 @@
           var infoTrail = new InfoTemplate("${TRAIL_NAME}", "<p>This segment is rated ${Segment_Rating}.</p>"+
 		  "<ul><li>Elevation: ${Elevation_feet} feet.</li>"+
 		  "<li>Slope: ${Slope}.</li></ul>");
-		  var infoForest = new InfoTemplate("${FORESTNAME}");
+		  var infoForest = new InfoTemplate("National Forest", "<p>This forest is: ${FORESTNAME}.</p>");
 		  var infoMoto = new InfoTemplate("${TRAIL_NAME}");
+        
           var motorizedNotAvailable = new FeatureLayer("https://services.arcgis.com/QWISJZQTqrWSOOHJ/arcgis/rest/services/Trails_Full_NA/FeatureServer/0",{
             mode: FeatureLayer.MODE_ONDEMAND,
             outFields: ["*"],
@@ -87,7 +88,52 @@
 		var sources = search.get("sources");
 		
 		sources.push({
-			featureLayer: nationalForest,
+			featureLayer: motorizedTrails,
+			searchFields: ["TRAIL_NAME"],
+			displayField: "TRAIL_NAME",
+			exactMatch: false,
+			outFields: ["TRAIL_NAME"],
+			name: "Trail Name",
+			placeholder: "Name",
+			maxResults: 2,
+			maxSuggestions: 2,
+			infoTemplate: infoMoto,
+			enableSuggestions: true,
+			minCharacters: 0
+			});
+		
+		sources.push({
+			featureLayer: motorizedNotAvailable,
+			searchFields: ["TRAIL_NAME"],
+			displayField: "TRAIL_NAME",
+			exactMatch: false,
+			outFields: ["TRAIL_NAME"],
+			name: "Trail Name",
+			placeholder: "Title",
+			maxResults: 2,
+			maxSuggestions: 2,
+			infoTemplate: infoMoto,
+			enableSuggestions: true,
+			minCharacters: 0
+			});        
+        
+ 		sources.push({
+			featureLayer: new FeatureLayer("https://services.arcgis.com/QWISJZQTqrWSOOHJ/arcgis/rest/services/Trails_Full_Hiking/FeatureServer/0"),
+			searchFields: ["TRAIL_NAME"],
+			displayField: "TRAIL_NAME",
+			exactMatch: false,
+			outFields: ["TRAIL_NAME"],
+			name: "Hiking Trail Name",
+			placeholder: "Name",
+			maxResults: 2,
+			maxSuggestions: 2,
+			infoTemplate: infoTrail,
+			enableSuggestions: true,
+			minCharacters: 0
+			});       
+        
+		sources.push({
+			featureLayer: new FeatureLayer("https://services.arcgis.com/QWISJZQTqrWSOOHJ/arcgis/rest/services/National_Forests_Outline/FeatureServer/0"),
 			searchFields: ["FORESTNAME"],
 			displayField: "FORESTNAME",
 			exactMatch: false,
@@ -100,7 +146,8 @@
 			enableSuggestions: true,
 			minCharacters: 0
 			});
-		
+        
+        
 		search.set("sources", sources);
 			
 		search.startup();
