@@ -1,92 +1,66 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     
     <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no">
-    <title>Layers without search</title>
+    <meta name="description" content="[Query State Info without Map]">
+  <!-- 
+  ArcGIS API for JavaScript, https://js.arcgis.com
+  For more information about the query_nomap sample, read the original sample description at developers.arcgis.com.
+  https://developers.arcgis.com/javascript/3/jssamples/query_nomap.html  
+  -->
+  <title>Query Trail Info without Map</title>
 
-    <link rel="stylesheet" href="https://js.arcgis.com/3.19/dijit/themes/claro/claro.css">
-    <link rel="stylesheet" href="https://js.arcgis.com/3.19/esri/css/esri.css">
-    <style>
-      html, body, #mapDiv {
-        padding:0;
-        margin:0;
-        height:100%;
-      }
-	  #search {
-		display: black;
-		position: absolute;
-		z-index: 2;
-		top: 20px;
-		left: 74px;
-	}
-    </style>
     <script src="https://js.arcgis.com/3.19/"></script>
     <script>
-      var map;
       require([
-        "esri/map", 
-		"esri/InfoTemplate", 
-		"esri/layers/FeatureLayer",
-        "dojo/parser",
-		"dojo/domReady!"
-      ], function(
-        Map,
-		InfoTemplate,
-		FeatureLayer,
-		parser
-      ) {
-		parser: parse();
-        map = new Map("mapDiv", {
-          basemap: "hybrid",
-          center: [-96.541, 38.34],
-          zoom: 6
-        });
+        "dojo/dom", "dojo/on",
+        "esri/tasks/query", "esri/tasks/QueryTask", "dojo/domReady!"
+      ], function (dom, on, Query, QueryTask) {
 
-        map.on("load", initOperationalLayer);
+        var queryTask = new QueryTask("https://sampleserver1.arcgisonline.com/ArcGIS/rest/services/Demographics/ESRI_Census_USA/MapServer/5");
 
-        function initOperationalLayer() {
-          var infoTrail = new InfoTemplate("${TRAIL_NAME}", "<p>This segment is rated ${Segment_Rating}.</p>"+
-		  "<ul><li>Elevation: ${Elevation_feet} feet.</li>"+
-		  "<li>Slope: ${Slope}.</li></ul>");
-		  var infoForest = new InfoTemplate("${FORESTNAME}");
-		  var infoMoto = new InfoTemplate("${TRAIL_NAME}");
-          var motorizedNotAvailable = new FeatureLayer("https://services.arcgis.com/QWISJZQTqrWSOOHJ/arcgis/rest/services/Trails_Full_NA/FeatureServer/0",{
-            mode: FeatureLayer.MODE_ONDEMAND,
-            outFields: ["*"],
-            infoTemplate: infoTrail
-			});
-          var hikingTrails = new FeatureLayer("https://services.arcgis.com/QWISJZQTqrWSOOHJ/arcgis/rest/services/Trail_Clip_Hiking/FeatureServer/0",{
-            mode: FeatureLayer.MODE_ONDEMAND,
-            outFields: ["*"],
-            infoTemplate: infoTrail
-			});
-		  var nationalForest = new FeatureLayer("https://services.arcgis.com/QWISJZQTqrWSOOHJ/arcgis/rest/services/National_Forests/FeatureServer/0",{
-			mode: FeatureLayer.MODE_ONDEMAND,
-			outFields: ["*"],
-			infoTemplate: infoForest
-          });
-          var motorizedTrails = new FeatureLayer("https://services.arcgis.com/QWISJZQTqrWSOOHJ/arcgis/rest/services/Trails_Full_Motorized/FeatureServer/0",{
-            mode: FeatureLayer.MODE_ONDEMAND,
-            outFields: ["*"],
-            infoTemplate: infoMoto
-			});
-          var motoNATrails = new FeatureLayer("https://services.arcgis.com/QWISJZQTqrWSOOHJ/arcgis/rest/services/Trails_NA_Clipped/FeatureServer/0",{
-            mode: FeatureLayer.MODE_ONDEMAND,
-            outFields: ["*"],
-            infoTemplate: infoTrail
-			});
-			
-          map.addLayers([motorizedNotAvailable, hikingTrails, motorizedTrails, motoNATrails, nationalForest]);
+        var query = new Query();
+        query.returnGeometry = false;
+        query.outFields = [
+          "SQMI", "STATE_NAME", "STATE_FIPS", "SUB_REGION", "STATE_ABBR",
+          "POP2000", "POP2007", "POP00_SQMI", "POP07_SQMI", "HOUSEHOLDS",
+          "MALES", "FEMALES", "WHITE", "BLACK", "AMERI_ES", "ASIAN", "OTHER",
+          "HISPANIC", "AGE_UNDER5", "AGE_5_17", "AGE_18_21", "AGE_22_29",
+          "AGE_30_39", "AGE_40_49", "AGE_50_64", "AGE_65_UP"
+        ];
+
+        on(dom.byId("execute"), "click", execute);
+
+        function execute () {
+          query.text = dom.byId("stateName").value;
+          queryTask.execute(query, showResults);
         }
-    
-			
-		});
+
+        function showResults (results) {
+          var resultItems = [];
+          var resultCount = results.features.length;
+          for (var i = 0; i < resultCount; i++) {
+            var featureAttributes = results.features[i].attributes;
+            for (var attr in featureAttributes) {
+              resultItems.push("<b>" + attr + ":</b>  " + featureAttributes[attr] + "<br>");
+            }
+            resultItems.push("<br>");
+          }
+          dom.byId("info").innerHTML = resultItems.join("");
+        }
+      });
     </script>
   </head>
-  <body class="claro">
-	<div id="search"></div>
-    <div id="mapDiv"></div>
+
+  <body>
+    US state name :
+    <input type="text" id="stateName" value="California">
+    <input id="execute" type="button" value="Get Details">
+    <br />
+    <br />
+    <div id="info" style="padding:5px; margin:5px; background-color:#eee;">
+    </div>
   </body>
 </html>
