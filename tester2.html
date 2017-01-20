@@ -1,83 +1,117 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+  <meta name="description" content="[Query features from a FeatureLayer - 4.2]">
+  <!-- 
+  ArcGIS API for JavaScript, https://js.arcgis.com
+  For more information about the featurelayer-query sample, read the original sample description at developers.arcgis.com.
+  https://developers.arcgis.com/javascript/latest/featurelayer-query/index.html  
+  -->
+  <title>Query features with my data INCOMPLETE - 4.2</title>
+
+  <link rel="stylesheet" href="https://js.arcgis.com/4.2/esri/css/main.css">
+  <script src="https://js.arcgis.com/4.2/"></script>
+
+  <style>
+    html,
+    body,
+    #viewDiv {
+      height: 100%;
+      width: 100%;
+      margin: 0;
+      padding: 0;
+    }
     
-    <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no">
-    <title>Search Tests w/o preloaded layers</title>
+    #infoDiv {
+      background-color: white;
+      color: black;
+      padding: 6px;
+      width: 400px;
+    }
+    
+    #results {
+      font-weight: bolder;
+    }
+  </style>
 
-    <link rel="stylesheet" href="https://js.arcgis.com/3.19/dijit/themes/claro/claro.css">
-    <link rel="stylesheet" href="https://js.arcgis.com/3.19/esri/css/esri.css">
-    <style>
-      html, body, #mapDiv {
-        padding:0;
-        margin:0;
-        height:100%;
-      }
-	  #search {
-		display: black;
-		position: absolute;
-		z-index: 2;
-		top: 20px;
-		left: 74px;
-	}
-    </style>
-    <script src="https://js.arcgis.com/3.19/"></script>
-    <script>
-      var map;
-      require([
-        "esri/map", 
-		"esri/InfoTemplate", 
-		"esri/layers/FeatureLayer",
-        "dojo/parser",
-		"esri/dijit/Search",
-		"dojo/domReady!"
+  <script>
+  require([
+        "esri/Map",
+        "esri/views/MapView",
+        "esri/layers/FeatureLayer",
+        "esri/layers/GraphicsLayer",
+        "esri/geometry/geometryEngine",
+        "esri/Graphic",   
+    
+        "dojo/on",
+        "dojo/dom",
+        "dojo/dom-construct",
+        "dojo/domReady!"
       ], function(
-        Map, 
-		InfoTemplate, 
-		FeatureLayer,
-		Search,
-        parser
+        Map, MapView,
+        FeatureLayer,
+        GraphicsLayer,
+        geometryEngine,
+        Graphic,
+        on, dom, domConstruct
       ) {
-        parser.parse();
-        map = new Map("mapDiv", {
-          basemap: "hybrid",
-          center: [-96.541, 38.34],
-          zoom: 6
+        var trailURL = "https://services.arcgis.com/QWISJZQTqrWSOOHJ/arcgis/rest/services/TrailsFullMotorizedSPECIAL/FeatureServer/0";
+    
+        var nationalForests = new FeatureLayer({
+          url: "https://services.arcgis.com/QWISJZQTqrWSOOHJ/arcgis/rest/services/National_Forests/FeatureServer/0",
+          outFields: ["*"],
+          visible: false
         });
-
-     
-		var search = new Search({
-			enableLabel: false,
-			map: map
-			}, "search");
-			
-		var sources = search.get("sources");
-		
-		sources.push({
-			featureLayer: new FeatureLayer("https://services.arcgis.com/QWISJZQTqrWSOOHJ/arcgis/rest/services/National_Forests/FeatureServer/0"),
-			searchFields: ["FORESTNAME"],
-			displayField: "FORESTNAME",
-			exactMatch: false,
-			outFields: ["FORESTNAME"],
-			name: "National Forest",
-			placeholder: "Name",
-			maxResults: 2,
-			maxSuggestions: 2,
-			infoTemplate: new InfoTemplate("{FORESTNAME}"),
-			enableSuggestions: true,
-			minCharacters: 0
-			});
-		
-		search.set("sources", sources);
-			
-		search.startup();
-			
-		});
-    </script>
+    
+    var motorizedTrails = new FeatureLayer({
+      url: trailURL,
+      outFields: ["*"],
+      visible: false
+    });
+    
+    var resultsLayer = new GraphicsLayer();
+    
+    var map = new Map({
+      basemap: "topo",
+      layers: [nationalForests, motorizedTrails, resultsLayer]
+    });
+    
+    var view = new MapView({
+      container: "viewDiv",
+      map: map,
+      center: [-97.75188, 37.23308],
+      zoom: 4
+    });
+    view.ui.add("infoDiv", "top-right");
+    
+    //query of national forest layer
+    view.then(function(){
+      return nationalForests.then(function(){
+        var query = nationalForests.createQuery();
+        return nationalForests.queryFeatures(query);
+      });
+    })
+    .then(getValues)
+    .then(getUniqueValues)
+    .then(addToSelect);
+    
+    //Return national forest attribute
+    function getValues(response) {
+          var features = response.features;
+          var values = features.map(function(feature) {
+            return feature.attributes.FORESTNAME;
+          });
+          return values;
+        }
+    
+    
+  </script>
   </head>
-  <body class="claro">
-	<div id="search"></div>
-    <div id="mapDiv"></div>
-  </body>
+
+<body>
+
+</body>
+
 </html>
