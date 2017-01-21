@@ -1,2 +1,21 @@
 What to do next?
 Create fields that show what activites can be done on each trail that is explicitly listed for motorized use.
+
+
+
+
+SIDE NOTE:
+See if it is possible to add all layers in 4.2 but display them as graphics. Might be a get around for the feature limit of featureLayers.
+
+
+
+
+WorkFlow for query in example:
+1. query results based on well type.
+2. creates buffer around these wells at user specified distance.
+3. query earthquakes within buffers.
+
+"WorkFlow" for my query (test query).
+1. query results based on trail usage.
+2. query results based on length of trail.
+ALSO WILL NEED RANGE OF TRAILS NOT JUST ONE DISTANCE...
