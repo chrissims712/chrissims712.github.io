@@ -40,7 +40,7 @@
          Color
       ) {
         map = new Map("map", {
-          basemap: "streets",
+          basemap: "topo",
           center: [-95.625, 39.243],
           zoom: 4,
           slider: false
@@ -48,8 +48,8 @@
         map.on("load", addFeatureLayer);
 
         function addFeatureLayer() {
-          var defaultSymbol = new SimpleFillSymbol().setStyle(SimpleFillSymbol.STYLE_NULL);
-          defaultSymbol.outline.setStyle(SimpleLineSymbol.STYLE_NULL);          
+          var defaultSymbol = new SimpleLineSymbol();
+          defaultSymbol.setColor(new Color([255, 255, 255]));
           
           //create renderer
           var renderer = new UniqueValueRenderer(defaultSymbol, "Segment_Rating");
