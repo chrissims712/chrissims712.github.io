@@ -1,66 +1,135 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
-  <title>National Forest Service Trails</title>
-
-  <link rel="stylesheet" href="https://js.arcgis.com/4.2/esri/css/main.css">
-  <script type="text/javascript" src="https://gc.kis.scr.kaspersky-labs.com/1B74BD89-2A22-4B93-B451-1C9E1052A0EC/main.js" charset="UTF-8"></script><script src="https://js.arcgis.com/4.2/"></script>
-
-  <style>
-    html,
-    body,
-    #viewDiv {
-      padding: 0;
-      margin: 0;
-      height: 100%;
-      width: 100%;
-    }
-  </style>
-
-  <script>
-  require([
-        "esri/Map",
-        "esri/views/MapView",
-        "esri/layers/FeatureLayer",
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no">
+    <meta name="description" content="[Unique Value Renderer]">
+  <!-- 
+  ArcGIS API for JavaScript, https://js.arcgis.com
+  For more information about the renderer_unique_value sample, read the original sample description at developers.arcgis.com.
+  https://developers.arcgis.com/javascript/3/jssamples/renderer_unique_value.html  
+  -->
+  <title>Clipped Trails Rendered, Full Trails Alone</title>
+    <link rel="stylesheet" href="https://js.arcgis.com/3.19/esri/css/esri.css">
+    <style>
+      html, body, #map{
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+    <script src="https://js.arcgis.com/3.19/"></script>
+    <script>
+      var map;
+      require([
+        "esri/map", 
+        "esri/layers/FeatureLayer", 
+        "esri/InfoTemplate",
+        "esri/symbols/SimpleLineSymbol", 
+        "esri/symbols/SimpleFillSymbol",
+        "esri/renderers/UniqueValueRenderer",
+        "esri/renderers/ScaleDependentRenderer",
+        "esri/Color",
         "dojo/domReady!"
-      ],
-      function(
-        Map, MapView,
-        FeatureLayer
+      ], function(
+        Map, FeatureLayer, 
+         InfoTemplate,
+        SimpleLineSymbol, 
+         SimpleFillSymbol,
+        UniqueValueRenderer, 
+         ScaleDependentRenderer,
+         Color
       ) {
-
-        var map = new Map({
-          basemap: "hybrid"
+        map = new Map("map", {
+          basemap: "topo",
+          center: [-95.625, 39.243],
+          zoom: 4,
+          slider: true
         });
+        map.on("load", addFeatureLayer);
 
-        var view = new MapView({
-          container: "viewDiv",
-          map: map,
-		  center: [-101.94981250000075, 41.20977753557709],
-		  zoom: 5
-        });
-		
-      var template = {
-        title: "National Forest",
-        content: "<p>{FORESTNAME}</p>"+
-		"<ul><li>The size of this forest is {GIS_ACRES} acres.</li></ul>"
-      };
+        function addFeatureLayer() {
+          var defaultSymbol = new SimpleLineSymbol();
+          defaultSymbol.setColor(new Color([0, 0, 0]));
+          
+          //create renderer
+          var renderer = new UniqueValueRenderer(defaultSymbol, "Segment_Rating");
+
+          //add symbol for each possible value
+          renderer.addValue("Easy", new SimpleLineSymbol().setColor(new Color([0, 204, 0])));
+          renderer.addValue("Moderate", new SimpleLineSymbol().setColor(new Color([255, 255, 0])));
+          renderer.addValue("Hard", new SimpleLineSymbol().setColor(new Color([255, 128, 0])));
+          renderer.addValue("Very Hard", new SimpleLineSymbol().setColor(new Color([255, 0, 0])));
+          
+          
+          var hikingTrails = new FeatureLayer("https://services.arcgis.com/QWISJZQTqrWSOOHJ/arcgis/rest/services/Trail_Clip_Hiking/FeatureServer/0", {
+            infoTemplate: new InfoTemplate("${TRAIL_NAME}", "<p>This segment is rated ${Segment_Rating}.</p>"+
+		  "<ul><li>Elevation: ${Elevation_feet} feet.</li>"+
+		  "<li>Slope: ${Slope}.</li>"+
+		  "<li>National Forest: ${FORESTNAME}.</li></ul>"),
+            mode: FeatureLayer.MODE_ONDEMAND,
+            outFields: ["*"],
+            visible: false
+          });
+          
+          var hikingFull = new FeatureLayer("https://services.arcgis.com/QWISJZQTqrWSOOHJ/arcgis/rest/services/Trails_Full_Hiking/FeatureServer/0", {
+            infoTemplate: new InfoTemplate("${TRAIL_NAME}", "<p>This is the full trail of ${TRAIL_NAME}.</p>"),
+            mode: FeatureLayer.MODE_ONDEMAND,
+            outFields: ["*"]
+          });
 
 
-      var nationalForest = new FeatureLayer({
-        url: "https://services.arcgis.com/QWISJZQTqrWSOOHJ/arcgis/rest/services/National_Forests/FeatureServer/0",
-        outFields: ["*"],
-        popupTemplate: template
+          
+          var otherTrails = new FeatureLayer("https://services.arcgis.com/QWISJZQTqrWSOOHJ/arcgis/rest/services/Trails_NA_Clipped/FeatureServer/0", {
+            mode: FeatureLayer.MODE_ONDEMAND,
+            outFields: ["*"],
+            infoTemplate: new InfoTemplate("${TRAIL_NAME}", "<p>This segment is rated ${Segment_Rating}.</p>"+
+		  "<ul><li>Elevation: ${Elevation_feet} feet.</li>"+
+		  "<li>Slope: ${Slope}.</li>"+
+		  "<li>National Forest: ${FORESTNAME}.</li></ul>")
+          });
+          
+         
+          
+          var smallRenderer = new ScaleDependentRenderer({
+            rendererInfos: [{
+              renderer: renderer,
+              maxZoom: 15,
+              minZoom: 7
+            }]
+          });
+          
+          
+          
+          hikingTrails.setRenderer(smallRenderer);
+          otherTrails.setRenderer(smallRenderer);
+          
+          
+          
+          var nationalForest = new FeatureLayer("https://services.arcgis.com/QWISJZQTqrWSOOHJ/arcgis/rest/services/National_Forests/FeatureServer/0",{
+			mode: FeatureLayer.MODE_ONDEMAND,
+			outFields: ["*"],
+            infoTemplate: new InfoTemplate("National Forest", "<p>This forest is: ${FORESTNAME}.</p>")
+          });
+          
+
+          
+          map.addLayers([nationalForest, hikingTrails, otherTrails, hikingFull]);
+        }
+        map.on("zoom", zoomFacts);
+        
+        function zoomFacts() {
+          var currentZoom = map.getZoom();
+          console.log('Zoom: ' + currentZoom);
+        };
+        
       });
-      map.add(nationalForest);
-    });
-  </script>
-</head>
-
-<body>
-  <div id="viewDiv"></div>
-</body>
+    </script>
+  </head>
+  
+  <body>
+    <div id="map"></div>
+  </body>
 
 </html>

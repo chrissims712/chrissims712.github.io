@@ -19,3 +19,6 @@ WorkFlow for query in example:
 1. query results based on trail usage.
 2. query results based on length of trail.
 ALSO WILL NEED RANGE OF TRAILS NOT JUST ONE DISTANCE...
+
+
+
