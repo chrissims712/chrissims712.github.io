@@ -68,30 +68,30 @@
 		  "<ul><li>Elevation: ${Elevation_feet} feet.</li>"+
 		  "<li>Slope: ${Slope}.</li>"+
 		  "<li>National Forest: ${FORESTNAME}.</li></ul>"),
-            mode: FeatureLayer.MODE_ONDEMAND,
+            mode: FeatureLayer.SNAPSHOT,
             outFields: ["*"]
           });
           
           var hikingFull = new FeatureLayer("https://services.arcgis.com/QWISJZQTqrWSOOHJ/arcgis/rest/services/Trails_Full_Hiking/FeatureServer/0", {
             infoTemplate: new InfoTemplate("${TRAIL_NAME}", "<p>This is the full trail of ${TRAIL_NAME}.</p>"),
-            mode: FeatureLayer.MODE_ONDEMAND,
+            mode: FeatureLayer.SNAPSHOT,
             outFields: ["*"]
           });
 
 		var otherFull = new FeatureLayer("https://services.arcgis.com/QWISJZQTqrWSOOHJ/arcgis/rest/services/TrailsFullMotorizedNotAvailable/FeatureServer/0", {
             infoTemplate: new InfoTemplate("${TRAIL_NAME}", "<p>This is the full unknown motorized trail of ${TRAIL_NAME}.</p>"),
-            mode: FeatureLayer.MODE_ONDEMAND,
+            mode: FeatureLayer.SNAPSHOT,
             outFields: ["*"]
           });
          
 		 var motoFull = new FeatureLayer("https://services.arcgis.com/QWISJZQTqrWSOOHJ/arcgis/rest/services/TrailsFullMotorizedNotAvailable/FeatureServer/0", {
             infoTemplate: new InfoTemplate("${TRAIL_NAME}", "<p>This is the full motorized trail of ${TRAIL_NAME}.</p>"),
-            mode: FeatureLayer.MODE_ONDEMAND,
+            mode: FeatureLayer.SNAPSHOT,
             outFields: ["*"]
           }); 
 		  
           var otherTrails = new FeatureLayer("https://services.arcgis.com/QWISJZQTqrWSOOHJ/arcgis/rest/services/Trails_NA_Clipped/FeatureServer/0", {
-            mode: FeatureLayer.MODE_ONDEMAND,
+            mode: FeatureLayer.SNAPSHOT,
             outFields: ["*"],
             infoTemplate: new InfoTemplate("${TRAIL_NAME}", "<p>This segment is rated ${Segment_Rating}.</p>"+
 		  "<ul><li>Elevation: ${Elevation_feet} feet.</li>"+
