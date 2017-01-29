@@ -126,12 +126,7 @@
           
           map.addLayers([nationalForest, hikingTrails, otherTrails, hikingFull, otherFull, motoFull]);
         }
-        map.on("zoom", zoomFacts);
         
-        function zoomFacts() {
-          var currentZoom = map.getZoom();
-          console.log('Zoom: ' + currentZoom);
-        };
         
       });
     </script>
