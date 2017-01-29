@@ -44,7 +44,7 @@
         map = new Map("map", {
           basemap: "topo",
           center: [-95.625, 39.243],
-          zoom: 4,
+          zoom: 5,
           slider: true
         });
         map.on("load", addFeatureLayer);
@@ -107,7 +107,7 @@
           var largeRenderer = new ScaleDependentRenderer({
             rendererInfos: [{
               renderer: rendererFull,
-              maxZoom: 8,
+              maxZoom: 7,
               minZoom: 4
             }]
           });

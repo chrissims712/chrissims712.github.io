@@ -44,7 +44,7 @@
         map = new Map("map", {
           basemap: "topo",
           center: [-95.625, 39.243],
-          zoom: 4,
+          zoom: 5,
           slider: true
         });
         map.on("load", addFeatureLayer);
@@ -69,8 +69,7 @@
 		  "<li>Slope: ${Slope}.</li>"+
 		  "<li>National Forest: ${FORESTNAME}.</li></ul>"),
             mode: FeatureLayer.MODE_ONDEMAND,
-            outFields: ["*"],
-            visible: false
+            outFields: ["*"]
           });
           
           var hikingFull = new FeatureLayer("https://services.arcgis.com/QWISJZQTqrWSOOHJ/arcgis/rest/services/Trails_Full_Hiking/FeatureServer/0", {
@@ -96,7 +95,7 @@
             rendererInfos: [{
               renderer: renderer,
               maxZoom: 15,
-              minZoom: 7
+              minZoom: 10
             }]
           });
           
