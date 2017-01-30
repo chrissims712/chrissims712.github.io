@@ -2,155 +2,80 @@
 <html>
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    
-    <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no">
-    <meta name="description" content="[Unique Value Renderer]">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no"/>
+    <meta name="description" content="[Color Ramp]">
   <!-- 
   ArcGIS API for JavaScript, https://js.arcgis.com
-  For more information about the renderer_unique_value sample, read the original sample description at developers.arcgis.com.
-  https://developers.arcgis.com/javascript/3/jssamples/renderer_unique_value.html  
+  For more information about the renderer_color_ramp sample, read the original sample description at developers.arcgis.com.
+  https://developers.arcgis.com/javascript/3/jssamples/renderer_color_ramp.html  
   -->
-  <title>Everything Scale Rendered</title>
+  <title>Color Ramp</title>
     <link rel="stylesheet" href="https://js.arcgis.com/3.19/esri/css/esri.css">
     <style>
-      html, body, #map{
+      html, body, #map {
         height: 100%;
         margin: 0;
-        padding: 0;
+      }
+      #info {
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        padding: 10px;
+        background-color: #ddd;
+        font: 14px Segoe UI;
+        width: 200px;
+        text-align: center;
+        border-radius: 0 10px 0 0;
       }
     </style>
     <script src="https://js.arcgis.com/3.19/"></script>
     <script>
-      var map;
       require([
-        "esri/map", 
-        "esri/layers/FeatureLayer", 
-        "esri/InfoTemplate",
-        "esri/symbols/SimpleLineSymbol", 
-        "esri/symbols/SimpleFillSymbol",
-        "esri/renderers/UniqueValueRenderer",
-        "esri/renderers/ScaleDependentRenderer",
-        "esri/Color",
+        "esri/map", "esri/geometry/Extent", 
+        "esri/layers/FeatureLayer", "esri/InfoTemplate", "esri/dijit/Legend",
+        "esri/renderers/SimpleRenderer", "esri/Color", 
+        "esri/symbols/SimpleFillSymbol", "esri/symbols/SimpleLineSymbol", 
         "dojo/domReady!"
       ], function(
-        Map, FeatureLayer, 
-         InfoTemplate,
-        SimpleLineSymbol, 
-         SimpleFillSymbol,
-        UniqueValueRenderer, 
-         ScaleDependentRenderer,
-         Color
+        Map, Extent, 
+        FeatureLayer, InfoTemplate, Legend,
+        SimpleRenderer, Color, 
+        SimpleFillSymbol, SimpleLineSymbol
       ) {
-        map = new Map("map", {
-          basemap: "topo",
-          center: [-95.625, 39.243],
-          zoom: 5,
-          slider: true
+        var map = new Map("map", {
+          extent: new Extent({"xmin":-2460944,"ymin":-1389910,"xmax":2297115,"ymax":1643787,"spatialReference":{"wkid":102003}})
         });
-        map.on("load", addFeatureLayer);
-
-        function addFeatureLayer() {
-          var defaultSymbol = new SimpleLineSymbol();
-          defaultSymbol.setColor(new Color([0, 0, 0]));
-          
-          //create renderer
-          var renderer = new UniqueValueRenderer(defaultSymbol, "Segment_Rating");
-
-          //add symbol for each possible value
-          renderer.addValue("Easy", new SimpleLineSymbol().setColor(new Color([0, 204, 0])));
-          renderer.addValue("Moderate", new SimpleLineSymbol().setColor(new Color([255, 255, 0])));
-          renderer.addValue("Hard", new SimpleLineSymbol().setColor(new Color([255, 128, 0])));
-          renderer.addValue("Very Hard", new SimpleLineSymbol().setColor(new Color([255, 0, 0])));
-          
-          var rendererFull = new UniqueValueRenderer(defaultSymbol, "FORESTNAME");
-          
-          rendererFull.addValue("Williamette National Forest", new SimpleLineSymbol().setColor(new Color([255, 0, 127])));
-          rendererFull.addValue("Dixie National Forest", new SimpleLineSymbol().setColor(new Color([0, 0, 255])));
-          rendererFull.addValue("Boise National Forest", new SimpleLineSymbol().setColor(new Color([51, 255, 255])));
-          rendererFull.addValue("Cleveland National Forest", new SimpleLineSymbol().setColor(new Color([0, 0, 0])));
-          
-		  //hiking snipped
-          var hikingTrails = new FeatureLayer("https://services.arcgis.com/QWISJZQTqrWSOOHJ/arcgis/rest/services/Trail_Clip_Hiking/FeatureServer/0", {
-            infoTemplate: new InfoTemplate("${TRAIL_NAME}", "<p>This segment is rated ${Segment_Rating}.</p>"+
-		  "<ul><li>Elevation: ${Elevation_feet} feet.</li>"+
-		  "<li>Slope: ${Slope}.</li>"+
-		  "<li>National Forest: ${FORESTNAME}.</li></ul>"),
-            mode: FeatureLayer.MODE_ONDEMAND,
-            outFields: ["*"]
-          });
-          
-		  //full hiking
-          var hikingFull = new FeatureLayer("https://services.arcgis.com/QWISJZQTqrWSOOHJ/arcgis/rest/services/Trails_Full_Hiking/FeatureServer/0", {
-            infoTemplate: new InfoTemplate("${TRAIL_NAME}", "<p>This is the full trail of ${TRAIL_NAME}.</p>"),
-            mode: FeatureLayer.MODE_ONDEMAND,
-            outFields: ["*"]
-          });
-
-		  //other trails snipped
-          var otherTrails = new FeatureLayer("https://services.arcgis.com/QWISJZQTqrWSOOHJ/arcgis/rest/services/Trails_NA_Clipped/FeatureServer/0", {
-            mode: FeatureLayer.MODE_ONDEMAND,
-            outFields: ["*"],
-            infoTemplate: new InfoTemplate("${TRAIL_NAME}", "<p>This segment is rated ${Segment_Rating}.</p>"+
-		  "<ul><li>Elevation: ${Elevation_feet} feet.</li>"+
-		  "<li>Slope: ${Slope}.</li>"+
-		  "<li>National Forest: ${FORESTNAME}.</li></ul>")
-          });
-          
-		  //full other trails
-		var otherTrailsFull = new FeatureLayer("https://services.arcgis.com/QWISJZQTqrWSOOHJ/arcgis/rest/services/TrailsFullMotorizedSPECIAL/FeatureServer/0",{
-            mode: FeatureLayer.MODE_ONDEMAND,
-            outFields: ["*"],
-            infoTemplate: new InfoTemplate("${TRAIL_NAME}", "<p> This trail is a full NA motorized trail.</p>")
-			});
-		  
-          //scale renderers
-          var largeRenderer = new ScaleDependentRenderer({
-            rendererInfos: [{
-              renderer: rendererFull,
-              maxZoom: 7,
-              minZoom: 4
-            }]
-          });
-          
-          var smallRenderer = new ScaleDependentRenderer({
-            rendererInfos: [{
-              renderer: renderer,
-              maxZoom: 15,
-              minZoom: 7
-            }]
-          });
-          
-          
-          
-          hikingTrails.setRenderer(smallRenderer);
-          otherTrails.setRenderer(smallRenderer);
-          hikingFull.setRenderer(largeRenderer);
-		  otherTrailsFull.setRenderer(largeRenderer);
-          
-          //not rendered feature
-          var nationalForest = new FeatureLayer("https://services.arcgis.com/QWISJZQTqrWSOOHJ/arcgis/rest/services/National_Forests/FeatureServer/0",{
-			mode: FeatureLayer.MODE_ONDEMAND,
-			outFields: ["*"],
-            infoTemplate: new InfoTemplate("National Forest", "<p>This forest is: ${FORESTNAME}.</p>")
-          });
-          
-
-          
-          map.addLayers([nationalForest, hikingFull, hikingTrails, otherTrails, otherTrailsFull]);
-        }
-        map.on("zoom", zoomFacts);
         
-        function zoomFacts() {
-          var currentZoom = map.getZoom();
-          console.log('Zoom: ' + currentZoom);
-        };
+        var layer = new FeatureLayer("https://services.arcgis.com/V6ZHFr6zdgNZuVG0/arcgis/rest/services/USA_County_Crops_2007/FeatureServer/0", {
+          outFields: ["*"],
+          infoTemplate: new InfoTemplate("${COUNTY}, ${STATE}", "<div style='font: 18px Segoe UI'>The percentage of the area of the county that represents farmland is <b>${M086_07:NumberFormat(places:0)}%</b>.</div>")
+        });
         
+        var legend = new Legend({
+          map: map,
+          layerInfos: [{ title: "Percentage of county area used for farming", layer: layer }]
+        }, "legend");
+        
+        layer.on("load", function(){
+          var renderer = new SimpleRenderer(new SimpleFillSymbol().setOutline(new SimpleLineSymbol().setWidth(0.1).setColor(new Color([128,128,128]))));
+          renderer.setColorInfo({
+            field: "M086_07",
+            minDataValue: 0,
+            maxDataValue: 100,
+            colors: [
+              new Color([255, 255, 255]),
+              new Color([127, 127, 0])
+            ]
+          });
+          layer.setRenderer(renderer);
+          map.addLayer(layer);
+          legend.startup();
+        });
       });
     </script>
   </head>
-  
   <body>
     <div id="map"></div>
+    <div id="info"><div id="legend"></div></div>
   </body>
-
-</html>
+</html> 
