@@ -50,27 +50,19 @@
 		  "<li>Slope: ${Slope}.</li>"+
 		  "<li>National Forest: ${FORESTNAME}.</li></ul>");
 		  var infoForest = new InfoTemplate("National Forest", "<p>This forest is: ${FORESTNAME}.</p>");
-		  var infoMoto = new InfoTemplate("Trail for Motor Vehicles", "<p>This trail is called ${TRAIL_NAME}</p>" + "<ul><li>National Forest: ${FORESTNAME}.</li>"+
-		  "<li>This trail is: ${MotoType}.</li>"+
-		  "<li>Length: ${LENGTH}.</li></ul>");
         
 
-          var hikingTrails = new FeatureLayer("https://services.arcgis.com/QWISJZQTqrWSOOHJ/arcgis/rest/services/Trail_Clip_Hiking/FeatureServer/0",{
+          var hikingTrails = new FeatureLayer("https://services.arcgis.com/QWISJZQTqrWSOOHJ/arcgis/rest/services/TrailsCLIPPEDMotorizedNO/FeatureServer/0",{
             mode: FeatureLayer.MODE_ONDEMAND,
             outFields: ["*"],
             infoTemplate: infoTrail
 			});
-		  var nationalForest = new FeatureLayer("https://services.arcgis.com/QWISJZQTqrWSOOHJ/arcgis/rest/services/National_Forests/FeatureServer/0",{
+		  var nationalForest = new FeatureLayer("https://services.arcgis.com/QWISJZQTqrWSOOHJ/arcgis/rest/services/NationalForest/FeatureServer/0",{
 			mode: FeatureLayer.MODE_ONDEMAND,
 			outFields: ["*"],
 			infoTemplate: infoForest
           });
-          var motorizedTrails = new FeatureLayer("https://services.arcgis.com/QWISJZQTqrWSOOHJ/arcgis/rest/services/TrailsFullMotorizedSPECIAL/FeatureServer/0",{
-            mode: FeatureLayer.MODE_ONDEMAND,
-            outFields: ["*"],
-            infoTemplate: infoMoto
-			});
-          var motoNATrails = new FeatureLayer("https://services.arcgis.com/QWISJZQTqrWSOOHJ/arcgis/rest/services/Trails_NA_Clipped/FeatureServer/0",{
+          var motoNATrails = new FeatureLayer("https://services.arcgis.com/QWISJZQTqrWSOOHJ/arcgis/rest/services/TrailsCLIPPEDMotorizedNotAvailable/FeatureServer/0",{
             mode: FeatureLayer.MODE_ONDEMAND,
             outFields: ["*"],
             infoTemplate: infoTrail
@@ -85,36 +77,7 @@
 			}, "search");
 			
 		var sources = search.get("sources");
-
-		sources.push({
-			featureLayer: new FeatureLayer("https://services.arcgis.com/QWISJZQTqrWSOOHJ/arcgis/rest/services/TrailsFullMotorizedNotAvailable/FeatureServer/0"),
-			searchFields: ["TRAIL_NAME"],
-			displayField: "TRAIL_NAME",
-			exactMatch: false,
-			outFields: ["TRAIL_NAME"],
-			name: "Unspecified Trails",
-			placeholder: "Name",
-			maxResults: 2,
-			maxSuggestions: 2,
-			infoTemplate: infoMoto,
-			enableSuggestions: true,
-			minCharacters: 0
-			});        
-        
-		sources.push({
-			featureLayer: motorizedTrails,
-			searchFields: ["MotoType"],
-			displayField: "MotoType",
-			exactMatch: false,
-			outFields: ["TRAIL_NAME"],
-			name: "Motorized Trails",
-			placeholder: "Name or Type",
-			maxResults: 2,
-			maxSuggestions: 400,
-			infoTemplate: infoMoto,
-			enableSuggestions: true,
-			minCharacters: 0
-			});       
+   
         
  		sources.push({
 			featureLayer: new FeatureLayer("https://services.arcgis.com/QWISJZQTqrWSOOHJ/arcgis/rest/services/Trails_Full_Hiking/FeatureServer/0"),
@@ -132,7 +95,7 @@
 			});       
         
 		sources.push({
-			featureLayer: new FeatureLayer("https://services.arcgis.com/QWISJZQTqrWSOOHJ/arcgis/rest/services/National_Forests_Outline/FeatureServer/0"),
+			featureLayer: new FeatureLayer("https://services.arcgis.com/QWISJZQTqrWSOOHJ/arcgis/rest/services/National_Forests/FeatureServer/0"),
 			searchFields: ["FORESTNAME"],
 			displayField: "FORESTNAME",
 			exactMatch: false,

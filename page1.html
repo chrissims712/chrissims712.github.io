@@ -45,7 +45,10 @@
           basemap: "topo",
           center: [-95.625, 39.243],
           zoom: 5,
-          slider: true
+          slider: true,
+		  fadeOnZoom: true,
+		  force3DTransforms: true,
+		  navigationMode: "css-transforms"
         });
         map.on("load", addFeatureLayer);
 
