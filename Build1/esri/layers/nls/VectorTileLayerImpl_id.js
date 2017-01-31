@@ -1,0 +1,2 @@
+//>>built
+define("esri/layers/nls/VectorTileLayerImpl_id",{"dijit/nls/loading":{loadingState:"Memuatkan...",errorState:"Maaf, terjadi kesalahan",_localized:{}},"dijit/nls/common":{buttonOk:"OK",buttonCancel:"Batal",buttonSave:"Simpan",itemClose:"Tutup",_localized:{}},"dijit/form/nls/validate":{invalidMessage:"Nilai yang dimasukkan tidak valid.",missingMessage:"Nilai ini diperlukan.",rangeMessage:"Nilai ini di luar batas.",_localized:{}}});
