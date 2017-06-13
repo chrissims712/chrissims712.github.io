@@ -55,7 +55,7 @@
         map.on("load", showLayers);
 
         function showLayers() {
-          var infoForest = new InfoTemplate("${FORESTNAME}");
+          var infoForest = new InfoTemplate("${FORESTNAME}", "<p>This National Forest is called ${FORESTNAME}.</p>");
           var nationalForest = new FeatureLayer("http://services7.arcgis.com/A4I2VpxARLdkFsb0/arcgis/rest/services/National_Forest/FeatureServer/0",{
             mode: FeatureLayer.MODE_ONDEMAND,
             outFields: ["*"],
