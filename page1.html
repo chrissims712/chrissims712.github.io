@@ -16,6 +16,12 @@
         margin:0;
         height:100%;
       }
+      #HomeButton {
+      position: absolute;
+      top: 95px;
+      left: 20px;
+      z-index: 50;
+    }
     </style>
     <script src="https://js.arcgis.com/3.20/"></script>
     <script>
@@ -24,12 +30,14 @@
         "esri/map", 
         "esri/InfoTemplate", 
         "esri/layers/FeatureLayer",
+        "esri/dijit/HomeButton",
         "dojo/parser", 
         "dojo/domReady!"
       ], function(
         Map, 
         InfoTemplate, 
         FeatureLayer,
+        HomeButton,
         parser
       ) {
         parser.parse();
@@ -38,6 +46,11 @@
           center: [-96.541, 38.34],
           zoom: 5
         });
+        
+        var home = new HomeButton({
+        map: map
+        }, "HomeButton");
+        home.startup();
 
         map.on("load", showLayers);
 
@@ -67,6 +80,7 @@
   </head>
   <body class="claro">
     <div id="mapDiv">
+      <div id="HomeButton"></div>
     </div>
   </body>
 </html>
