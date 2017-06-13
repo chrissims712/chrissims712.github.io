@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
+    
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no">
+    <meta name="description" content="[FeatureLayer On Demand]">
+
+  <title>Test Page</title>
+
+    <link rel="stylesheet" href="https://js.arcgis.com/3.20/dijit/themes/claro/claro.css">
+    <link rel="stylesheet" href="https://js.arcgis.com/3.20/esri/css/esri.css">
+    <style>
+      html, body, #mapDiv {
+        padding:0;
+        margin:0;
+        height:100%;
+      }
+      #HomeButton {
+      position: absolute;
+      top: 95px;
+      left: 20px;
+      z-index: 50;
+    }
+    </style>
+    <script src="https://js.arcgis.com/3.20/"></script>
+    <script>
+      var map;
+      require([
+        "esri/map", 
+        "esri/InfoTemplate", 
+        "esri/layers/FeatureLayer",
+        "esri/dijit/HomeButton",
+        "dojo/parser", 
+        "dojo/domReady!"
+      ], function(
+        Map, 
+        InfoTemplate, 
+        FeatureLayer,
+        HomeButton,
+        parser
+      ) {
+        parser.parse();
+        map = new Map("mapDiv", {
+          basemap: "hybrid",
+          center: [-96.541, 38.34],
+          zoom: 5
+        });
+        
+        var home = new HomeButton({
+        map: map
+        }, "HomeButton");
+        home.startup();
+
+        map.on("load", showLayers);
+
+        function showLayers() {
+          var infoForest = new InfoTemplate("${FORESTNAME}");
+          var nationalForest = new FeatureLayer("http://services7.arcgis.com/A4I2VpxARLdkFsb0/arcgis/rest/services/National_Forest/FeatureServer/0",{
+            mode: FeatureLayer.MODE_ONDEMAND,
+            outFields: ["*"],
+            infoTemplate: infoForest
+          });
+          var infoTrails = new InfoTemplate("${TRAIL_NAME}", "<p>This segment is rated ${Segment_Rating}.</p>"+
+		  "<ul><li>Elevation: ${Elevation_feet} feet.</li>"+
+		  "<li>Slope: ${Slope}.</li>"+
+		  "<li>National Forest: ${FORESTNAME}.</li></ul>");
+          var hikingTrails = new FeatureLayer("http://services7.arcgis.com/A4I2VpxARLdkFsb0/arcgis/rest/services/Trails_Hiking/FeatureServer/0",{
+            mode: FeatureLayer.MODE_ONDEMAND,
+            outFields: ["*"],
+            infoTemplate: infoTrails
+          });
+
+          map.addLayer(nationalForest);
+          map.addLayer(hikingTrails);
+          
+        }
+      });
+    </script>
+  </head>
+  <body class="claro">
+    <div id="mapDiv">
+      <div id="HomeButton"></div>
+    </div>
+  </body>
+</html>
