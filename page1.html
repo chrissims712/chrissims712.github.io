@@ -61,11 +61,11 @@
             outFields: ["*"],
             infoTemplate: infoForest
           });
-          var infoTrails = new InfoTemplate("${TRAIL_NAME}", "<p>This segment is rated ${Segment_Rating}.</p>"+
+          var infoTrails = new InfoTemplate("${TRAIL_NAME}", "<p>This segment is rated ${Diff_rating}.</p>"+
 		  "<ul><li>Elevation: ${Elevation_feet} feet.</li>"+
 		  "<li>Slope: ${Slope}.</li>"+
 		  "<li>National Forest: ${FORESTNAME}.</li></ul>");
-          var hikingTrails = new FeatureLayer("http://services7.arcgis.com/A4I2VpxARLdkFsb0/arcgis/rest/services/Trails_Hiking/FeatureServer/0",{
+          var hikingTrails = new FeatureLayer("https://services7.arcgis.com/A4I2VpxARLdkFsb0/arcgis/rest/services/Trails_Hiking/FeatureServer/0",{
             mode: FeatureLayer.MODE_ONDEMAND,
             outFields: ["*"],
             infoTemplate: infoTrails
