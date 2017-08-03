@@ -83,7 +83,7 @@
             outFields: ["*"],
             infoTemplate: infoTrails
           });
-		  var infoFullTrails = new InfoTemplate("${TRAIL_NAME}", "<p>{TRAIL_NAME}, zoom in further to view trail difficulties.</p>");
+		  var infoFullTrails = new InfoTemplate("${TRAIL_NAME}", "<p>${TRAIL_NAME}, zoom in further to view trail difficulties.</p>");
 		  var fullTrails = new FeatureLayer("https://services7.arcgis.com/A4I2VpxARLdkFsb0/arcgis/rest/services/Trails_Full/FeatureServer/0",{
 			mode: FeatureLayer.MODE_ONDEMAND,
 			outFields: ["*"],
