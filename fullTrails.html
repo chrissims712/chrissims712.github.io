@@ -68,7 +68,7 @@
         home.startup();
 
 
-          var infoForest = new InfoTemplate("${FORESTNAME}", "<p>This National Forest is called ${FORESTNAME}.</p>");
+          var infoForest = new InfoTemplate("${FORESTNAME}", "<p>${FORESTNAME}</p>");
           var nationalForest = new FeatureLayer("http://services7.arcgis.com/A4I2VpxARLdkFsb0/arcgis/rest/services/National_Forest/FeatureServer/0",{
             mode: FeatureLayer.MODE_ONDEMAND,
             outFields: ["*"],
@@ -83,6 +83,13 @@
             outFields: ["*"],
             infoTemplate: infoTrails
           });
+		  var infoFullTrails = new InfoTemplate("${TRAIL_NAME}", "<p>{TRAIL_NAME}, zoom in further to view trail difficulties.</p>");
+		  var fullTrails = new FeatureLayer("https://services7.arcgis.com/A4I2VpxARLdkFsb0/arcgis/rest/services/Trails_Full/FeatureServer/0",{
+			mode: FeatureLayer.MODE_ONDEMAND,
+			outFields: ["*"],
+			infoTemplate: infoFullTrails
+			});
+			
 		  
 		  var renderer = new UniqueValueRenderer(null, "Diff_rating");
 		  
@@ -117,6 +124,7 @@
 		  hikingTrails.setRenderer(renderer);
 		  map.addLayer(nationalForest);
           map.addLayer(hikingTrails);
+		  map.addLayer(fullTrails);
           
 		  map.on("load", function(evt){
 		  var legend = new Legend({
