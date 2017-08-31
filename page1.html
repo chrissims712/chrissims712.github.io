@@ -6,7 +6,7 @@
     <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no">
     <meta name="description" content="[FeatureLayer On Demand]">
 
-  <title>Hiking Trails</title>
+  <title>(BETA) Hiking Trails Test Page</title>
 
     <link rel="stylesheet" href="https://js.arcgis.com/3.20/dijit/themes/claro/claro.css">
     <link rel="stylesheet" href="https://js.arcgis.com/3.20/esri/css/esri.css">
@@ -16,6 +16,16 @@
         margin:0;
         height:100%;
       }
+	  #info{
+	  top: 0px;
+	  right: 0px;
+	  position: absolute;
+	  z-index: 99;
+	  opacity: 0.9;
+	  background-color: whitesmoke;
+	  border-bottom-left-radius: 8px;
+	  padding: 0px 0px 0px 10px;
+	  }
       #HomeButton {
       position: absolute;
       top: 95px;
@@ -31,16 +41,21 @@
         "esri/InfoTemplate", 
         "esri/layers/FeatureLayer",
         "esri/dijit/HomeButton",
-        "dojo/parser", 
+        "esri/Color",
+		"esri/symbols/SimpleLineSymbol",
+		"esri/renderers/UniqueValueRenderer",
+		"esri/dijit/Legend",
         "dojo/domReady!"
       ], function(
         Map, 
         InfoTemplate, 
         FeatureLayer,
         HomeButton,
-        parser
+        Color,
+		SimpleLineSymbol,
+		UniqueValueRenderer,
+		Legend
       ) {
-        parser.parse();
         map = new Map("mapDiv", {
           basemap: "hybrid",
           center: [-96.541, 38.34],
@@ -52,10 +67,8 @@
         }, "HomeButton");
         home.startup();
 
-        map.on("load", showLayers);
 
-        function showLayers() {
-          var infoForest = new InfoTemplate("${FORESTNAME}", "<p>This National Forest is called ${FORESTNAME}.</p>");
+          var infoForest = new InfoTemplate("${FORESTNAME}", "<p>${FORESTNAME}</p>");
           var nationalForest = new FeatureLayer("http://services7.arcgis.com/A4I2VpxARLdkFsb0/arcgis/rest/services/National_Forest/FeatureServer/0",{
             mode: FeatureLayer.MODE_ONDEMAND,
             outFields: ["*"],
@@ -70,11 +83,62 @@
             outFields: ["*"],
             infoTemplate: infoTrails
           });
-
-          map.addLayer(nationalForest);
+		  var infoFullTrails = new InfoTemplate("${TRAIL_NAME}", "<p>${TRAIL_NAME}, zoom in further to view trail difficulties.</p>");
+		  var fullTrails = new FeatureLayer("https://services7.arcgis.com/A4I2VpxARLdkFsb0/arcgis/rest/services/Trails_Full/FeatureServer/0",{
+			mode: FeatureLayer.MODE_ONDEMAND,
+			outFields: ["*"],
+			infoTemplate: infoFullTrails
+			});
+			
+		  
+		  var renderer = new UniqueValueRenderer(null, "Diff_rating");
+		  
+		  function createSymbol (color) {
+		  return new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color(color), 1.5);
+		  }
+		  
+		  renderer. addValue({
+		  value: "Easy",
+		  symbol: createSymbol("#4CE600"),
+		  label: "Easy"
+		  });
+		  
+		  renderer. addValue({
+		  value: "Moderate",
+		  symbol: createSymbol("#FFFF00"),
+		  label: "Moderate"
+		  });
+		  
+		  renderer. addValue({
+		  value: "Hard",
+		  symbol: createSymbol("#E64C00"),
+		  label: "Hard"
+		  });
+		  
+		  renderer. addValue({
+		  value: "Very Hard",
+		  symbol: createSymbol("#FF0000"),
+		  label: "Very Hard"
+		  });
+		  
+		  hikingTrails.setRenderer(renderer);
+		  map.addLayer(nationalForest);
           map.addLayer(hikingTrails);
+		  map.addLayer(fullTrails);
           
-        }
+		  map.on("load", function(evt){
+		  var legend = new Legend({
+		  map:map,
+		  layerInfos:[{
+		  layer: hikingTrails,
+		  title: "Hiking Trails Difficulty Rating"
+		  }]
+		  }, "legendDiv");
+		  
+		  legend.startup();
+		  });
+		  
+        
       });
     </script>
   </head>
@@ -82,5 +146,6 @@
     <div id="mapDiv">
       <div id="HomeButton"></div>
     </div>
+	<div id="info"><div id="legendDiv"></div></div>
   </body>
 </html>
