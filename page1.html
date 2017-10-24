@@ -78,13 +78,13 @@
 		  "<ul><li>Elevation: ${elevFeet} feet.</li>"+
 		  "<li>Slope: ${Slope}.</li>"+
 		  "<li>National Forest: ${FORESTNAME}.</li></ul>");
-          var hikingTrails = new FeatureLayer("https://services8.arcgis.com/n8P9SB3aHeuEKcuJ/arcgis/rest/services/Trail_Segment/FeatureServer/0",{
+          var hikingTrails = new FeatureLayer("https://services8.arcgis.com/n8P9SB3aHeuEKcuJ/arcgis/rest/services/Trails_Segment/FeatureServer/0",{
             mode: FeatureLayer.MODE_ONDEMAND,
             outFields: ["*"],
             infoTemplate: infoTrails
           });
 		  var infoFullTrails = new InfoTemplate("${TRAIL_NAME}", "<p>${TRAIL_NAME}, zoom in further to view trail difficulties.</p>");
-		  var fullTrails = new FeatureLayer("https://services8.arcgis.com/n8P9SB3aHeuEKcuJ/arcgis/rest/services/Full_Trails/FeatureServer/0",{
+		  var fullTrails = new FeatureLayer("https://services8.arcgis.com/n8P9SB3aHeuEKcuJ/arcgis/rest/services/Trails_Full/FeatureServer/0",{
 			mode: FeatureLayer.MODE_ONDEMAND,
 			outFields: ["*"],
 			infoTemplate: infoFullTrails
