@@ -6,7 +6,7 @@
     <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no">
     <meta name="description" content="[FeatureLayer On Demand]">
 
-  <title>(BETA) Hiking Trails Test Page</title>
+  <title>Hiking Trails</title>
 
     <link rel="stylesheet" href="https://js.arcgis.com/3.20/dijit/themes/claro/claro.css">
     <link rel="stylesheet" href="https://js.arcgis.com/3.20/esri/css/esri.css">
@@ -69,29 +69,28 @@
 
 
           var infoForest = new InfoTemplate("${FORESTNAME}", "<p>${FORESTNAME}</p>");
-          var nationalForest = new FeatureLayer("http://services7.arcgis.com/A4I2VpxARLdkFsb0/arcgis/rest/services/National_Forest/FeatureServer/0",{
+          var nationalForest = new FeatureLayer("https://services8.arcgis.com/n8P9SB3aHeuEKcuJ/arcgis/rest/services/National_Forest/FeatureServer/0",{
             mode: FeatureLayer.MODE_ONDEMAND,
             outFields: ["*"],
             infoTemplate: infoForest
           });
-          var infoTrails = new InfoTemplate("${TRAIL_NAME}", "<p>This segment is rated ${Diff_rating}.</p>"+
-		  "<ul><li>Elevation: ${Elevation_feet} feet.</li>"+
-		  "<li>Slope: ${Slope}.</li>"+
-		  "<li>National Forest: ${FORESTNAME}.</li></ul>");
-          var hikingTrails = new FeatureLayer("https://services7.arcgis.com/A4I2VpxARLdkFsb0/arcgis/rest/services/Trails_Hiking/FeatureServer/0",{
+          var infoTrails = new InfoTemplate("${TRAIL_NAME}", "<p>This segment is rated ${segRating}.</p>"+
+		  "<ul><li>Elevation: ${feetElev} feet.</li>"+
+		  "<li>Slope: ${Slope}.</li></ul>");
+          var hikingTrails = new FeatureLayer("https://services8.arcgis.com/n8P9SB3aHeuEKcuJ/arcgis/rest/services/AllTrailSeg/FeatureServer/0",{
             mode: FeatureLayer.MODE_ONDEMAND,
             outFields: ["*"],
             infoTemplate: infoTrails
           });
 		  var infoFullTrails = new InfoTemplate("${TRAIL_NAME}", "<p>${TRAIL_NAME}, zoom in further to view trail difficulties.</p>");
-		  var fullTrails = new FeatureLayer("https://services7.arcgis.com/A4I2VpxARLdkFsb0/arcgis/rest/services/Trails_Full/FeatureServer/0",{
+		  var fullTrails = new FeatureLayer("https://services8.arcgis.com/n8P9SB3aHeuEKcuJ/arcgis/rest/services/AllTrailFull/FeatureServer/0",{
 			mode: FeatureLayer.MODE_ONDEMAND,
 			outFields: ["*"],
 			infoTemplate: infoFullTrails
 			});
 			
 		  
-		  var renderer = new UniqueValueRenderer(null, "Diff_rating");
+		  var renderer = new UniqueValueRenderer(null, "segRating");
 		  
 		  function createSymbol (color) {
 		  return new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color(color), 1.5);
